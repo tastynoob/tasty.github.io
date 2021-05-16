@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  
+  <title>用express框架自己设计web服务器 - [哧溜]的秘密空间</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  
+  
+
+  <link rel="shortcut icon" href="/icon.png" type="image/png" />
+  <meta name="description" content="使用nodejs的express框架搭建一台web服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用express框架自己设计web服务器">
+<meta property="og:url" content="http://tastynoob.github.io/2021/04/10/%E7%94%A8express%E6%A1%86%E6%9E%B6%E8%87%AA%E5%B7%B1%E8%AE%BE%E8%AE%A1web%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="[哧溜]的秘密空间">
+<meta property="og:description" content="使用nodejs的express框架搭建一台web服务器">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-04-10T03:19:36.192Z">
+<meta property="article:modified_time" content="2021-04-10T04:19:21.522Z">
+<meta property="article:author" content="[哧溜]">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
+  
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
+  
+  <link rel="stylesheet" href="/css/style.css?v=1621174569844">
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+  
+  <div id="nexmoe-background">
+    <div class="nexmoe-bg" style="background-image: url(/images/BackGround.jpg)"></div>
+    <div class="mdui-appbar mdui-shadow-0">
+      <div class="mdui-toolbar">
+        <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+        <a href="/" title="[哧溜]" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="[哧溜]"></a>
+       </div>
+    </div>
+  </div>
+  <div id="nexmoe-header">
+      <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="[哧溜]">
+            <img src="/images/header.jpg" alt="[哧溜]" alt="[哧溜]">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>14</div>
+        <div><span>Tags</span>10</div>
+        <div><span>Categories</span>4</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/about.html" title="关于博客">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于博客
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple" href="/myself.html" title="个人介绍">
+            <i class="mdui-list-item-icon nexmoefont icon-tag-fill"></i>
+            <div class="mdui-list-item-content">
+                个人介绍
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+  
+  <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+        <form id="search_form" action_e="https://www.google.com/search?q=" onsubmit="return search();">
+            <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+        </form>
+    </div>
+</div>
+  
+  <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-social">
+        <a class="mdui-ripple" href="https://github.com/tastynoob/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23);background-color: rgba(25, 23, 23, .15);">
+            <i class="nexmoefont icon-github"></i>
+        </a>
+    </div>
+</div>
+  
+  
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">2</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/技术/">技术</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+  
+  
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/js/" style="font-size: 10px;">js</a> <a href="/tags/model/" style="font-size: 10px;">model</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/riscv/" style="font-size: 20px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/%E6%94%BB%E7%95%A5/" style="font-size: 10px;">攻略</a> <a href="/tags/%E7%A7%91%E6%99%AE/" style="font-size: 20px;">科普</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a>
+    </div>
+    
+  </div>
+
+  
+  
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/">2021</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+<style>
+.nexmoe-widget .archive-list-count{
+	position : absolute;
+	right: 15px;
+	top:9px;
+	color: #DDD;
+}
+</style>
+
+  
+</aside>
+    <div class="nexmoe-copyright">
+        &copy; 2021 [哧溜]
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+    </div>
+</div><!-- .nexmoe-drawer -->
+  </div>
+  <div id="nexmoe-content">
+    <div class="nexmoe-primary">
+        <div class="nexmoe-post">
+  
+      <div class="nexmoe-post-cover" style="padding-bottom: NaN%;"> 
+          <img data-src="/images/lsp/2.jpg" data-sizes="auto" alt="用express框架自己设计web服务器" class="lazyload">
+          <h1>用express框架自己设计web服务器</h1>
+      </div>
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年04月10日</a>
+    <a><i class="nexmoefont icon-areachart"></i>905 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 4 分钟</a>
+</div>
+
+  <div class="nexmoe-post-right">
+    
+      <div class="nexmoe-fixed">
+        <div class="nexmoe-valign">
+            <div class="nexmoe-toc">
+                
+            </div>
+        </div>
+      </div>
+    
+  </div>
+
+  <article>
+    <p>使用nodejs的express框架搭建一台web服务器</p>
+<a id="more"></a>
+
+<p>首先要安装express框架<br>命令行输入</p>
+<pre><code class="cmd">npm install -g express</code></pre>
+<p>等待安装完成即可<br>这里是全局安装express框架<br>需要设置环境变量NODE_PATH<br>将express模块路径添加到NODE_PATH中  </p>
+<p>另外，你需要简单了解路由的概念<br>比如：baidu.com/file/2333.jpg<br>其中 “baidu.com”是host<br>“/file”指的就是路由，由服务器处理你需要申请访问的路由<br>“/file/2333.jpg” 需要就是访问的链接</p>
+<p>接下来，直接上代码  </p>
+<pre><code class="javascript">//导入express模块
+var express = require(&#39;express&#39;);
+var bodyParser = require(&#39;body-parser&#39;);
+var url = require(&#39;url&#39;);
+var app = express();
+
+// 创建 application/x-www-form-urlencoded 编码解析
+var urlencodedParser = bodyParser.urlencoded(&#123; extended: false &#125;)
+
+//这里是服务器处理GET请求的方法
+//&#39;*&#39;代表处理任何GET链接
+//比如GET baidu.com/2333/ ,&quot;/2333/&quot;就会被该get方法所接受
+//同时传递相关参数给回调函数
+app.get(&#39;*&#39;, function (req, res) &#123;
+
+    //解析传入的路由链接，如果传入的链接包含中文，需要使用URI反编码
+    var reqPath = decodeURI(url.parse(req.url).pathname);
+
+    //输出GET请求客户端的IP地址，以及链接
+    console.log(&#39;GET请求地址：&#39; + req.ip.match(/\d+\.\d+\.\d+\.\d+/) + &quot;;链接：&quot; + reqPath);
+
+    //这里做个小示范
+    //如果GET /file/的话，就把本地路径下/file/index.html文件发送给客户端
+    var filePath;
+
+    if (reqPath.endsWith(&#39;/&#39;)) &#123;
+
+        filePath = reqPath.substr(1) + &#39;index.html&#39;;
+
+        if (fs.existsSync(filePath)) &#123;
+
+            //该方法可直接发送文件，包括文本，图片等...
+            res.sendFile(filePath);
+
+        &#125; else &#123;//如果没有该文件
+
+            //该方法直接发送目标数据
+            res.send(&quot;访问错误！！&quot;);
+        &#125;
+    &#125;
+    else &#123;
+
+        filePath = __dirname + reqPath;
+
+        if (fs.existsSync(filePath)) &#123;
+
+            res.sendFile(filePath);
+        &#125; else &#123;
+
+            res.send(&quot;访问错误！！&quot;);
+        &#125;
+    &#125;
+&#125;)
+
+
+//这里是处理POST请求
+//&#39;*&#39;表示处理任何POST链接
+//比如 POST /ADD/,那么“/ADD/”就会被该方法所接受
+//同时传递相关参数给回调函数
+app.post(&#39;*&#39;, urlencodedParser, function (req, res) &#123;
+
+    //解析POST链接
+    var reqPath = decodeURI(url.parse(req.url).pathname);
+
+    console.log(&#39;POST请求地址：&#39; + req.ip.match(/\d+\.\d+\.\d+\.\d+/) + &quot;;链接：&quot; + reqPath);
+
+    //打印客户端传过来的POST数据，可以是json字符串或者其它什么的
+    //比如客户端POST /hello,并发送“hello world”字符串,
+    //那么此处就会打印hello world
+    console.log(req.body);
+    //post请求也需要给客户端一个回应
+    res.send(&quot;成功！！&quot;);
+&#125;)
+
+
+//启动服务器
+//web服务器需要提供80端口给外部访问
+var server = app.listen(80, function () &#123;
+    console.log(&quot;启动服务器&quot;);
+    //服务器默认的IP地址就是当前主机的IP地址
+    console.log(server.address());
+&#125;)
+
+</code></pre>
+<p>当然可以可使用专门的GET，POST路由来处理专门的请求</p>
+<pre><code class="javascript">app.get(&#39;/get&#39;,参数省略)
+//这里只接受/get路由
+//例如 baidu.com/get/ , baidu.com/get/2333.jpg
+//不接受 baidu.com/233/
+
+
+app.post(&#39;/post&#39;,参数省略)
+//这里只接受/post路由
+//例如 baidu.com/post/ , baidu.com/post/2333.jpg
+//不接受 baidu.com/233/
+</code></pre>
+<p>路由也可以是某个文件</p>
+<pre><code class="javascript">app.get(&#39;/233.jpg&#39;,参数省略)
+//这里只接受/233.jpg路由
+//例如 baidu.com/233.jpg
+//不接受 baidu.com/233
+</code></pre>
+<p>如果想让客户端访问服务器中一个文件夹里所有的文件<br>实现一个简单的文件服务器<br>可以使用 “use”方法  </p>
+<pre><code class="javascript">app.use(&#39;/public&#39;, express.static(&#39;DataBase&#39;));
+//当客户端提交GET /public/233.jpg请求
+//那么服务器会将本地路径下 DataBase/233.jpg发送给客户端
+</code></pre>
+<p>有关express框架详细教程可参见<a target="_blank" rel="noopener" href="https://www.runoob.com/nodejs/nodejs-express-framework.html">菜鸟教程</a></p>
+
+  </article>
+
+  
+    
+  <div class="nexmoe-post-copyright">
+    <strong>Author：</strong>[哧溜]<br>
+    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/04/10/%E7%94%A8express%E6%A1%86%E6%9E%B6%E8%87%AA%E5%B7%B1%E8%AE%BE%E8%AE%A1web%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;04&#x2F;10&#x2F;%E7%94%A8express%E6%A1%86%E6%9E%B6%E8%87%AA%E5%B7%B1%E8%AE%BE%E8%AE%A1web%E6%9C%8D%E5%8A%A1%E5%99%A8&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;04&#x2F;10&#x2F;%E7%94%A8express%E6%A1%86%E6%9E%B6%E8%87%AA%E5%B7%B1%E8%AE%BE%E8%AE%A1web%E6%9C%8D%E5%8A%A1%E5%99%A8&#x2F;</a><br>
+    
+      <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+    
+  </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+    
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/js/" rel="tag">js</a>
+    
+</div>
+
+  <div class="nexmoe-post-footer">
+    <section class="nexmoe-comment">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.5.0/dist/gitalk.min.css">
+<div id="gitalk"></div>
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1.5.0/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    !function(n){"use strict";function d(n,t){var r=(65535&n)+(65535&t);return(n>>16)+(t>>16)+(r>>16)<<16|65535&r}function f(n,t,r,e,o,u){return d((c=d(d(t,n),d(e,u)))<<(f=o)|c>>>32-f,r);var c,f}function l(n,t,r,e,o,u,c){return f(t&r|~t&e,n,t,o,u,c)}function v(n,t,r,e,o,u,c){return f(t&e|r&~e,n,t,o,u,c)}function g(n,t,r,e,o,u,c){return f(t^r^e,n,t,o,u,c)}function m(n,t,r,e,o,u,c){return f(r^(t|~e),n,t,o,u,c)}function i(n,t){var r,e,o,u;n[t>>5]|=128<<t%32,n[14+(t+64>>>9<<4)]=t;for(var c=1732584193,f=-271733879,i=-1732584194,a=271733878,h=0;h<n.length;h+=16)c=l(r=c,e=f,o=i,u=a,n[h],7,-680876936),a=l(a,c,f,i,n[h+1],12,-389564586),i=l(i,a,c,f,n[h+2],17,606105819),f=l(f,i,a,c,n[h+3],22,-1044525330),c=l(c,f,i,a,n[h+4],7,-176418897),a=l(a,c,f,i,n[h+5],12,1200080426),i=l(i,a,c,f,n[h+6],17,-1473231341),f=l(f,i,a,c,n[h+7],22,-45705983),c=l(c,f,i,a,n[h+8],7,1770035416),a=l(a,c,f,i,n[h+9],12,-1958414417),i=l(i,a,c,f,n[h+10],17,-42063),f=l(f,i,a,c,n[h+11],22,-1990404162),c=l(c,f,i,a,n[h+12],7,1804603682),a=l(a,c,f,i,n[h+13],12,-40341101),i=l(i,a,c,f,n[h+14],17,-1502002290),c=v(c,f=l(f,i,a,c,n[h+15],22,1236535329),i,a,n[h+1],5,-165796510),a=v(a,c,f,i,n[h+6],9,-1069501632),i=v(i,a,c,f,n[h+11],14,643717713),f=v(f,i,a,c,n[h],20,-373897302),c=v(c,f,i,a,n[h+5],5,-701558691),a=v(a,c,f,i,n[h+10],9,38016083),i=v(i,a,c,f,n[h+15],14,-660478335),f=v(f,i,a,c,n[h+4],20,-405537848),c=v(c,f,i,a,n[h+9],5,568446438),a=v(a,c,f,i,n[h+14],9,-1019803690),i=v(i,a,c,f,n[h+3],14,-187363961),f=v(f,i,a,c,n[h+8],20,1163531501),c=v(c,f,i,a,n[h+13],5,-1444681467),a=v(a,c,f,i,n[h+2],9,-51403784),i=v(i,a,c,f,n[h+7],14,1735328473),c=g(c,f=v(f,i,a,c,n[h+12],20,-1926607734),i,a,n[h+5],4,-378558),a=g(a,c,f,i,n[h+8],11,-2022574463),i=g(i,a,c,f,n[h+11],16,1839030562),f=g(f,i,a,c,n[h+14],23,-35309556),c=g(c,f,i,a,n[h+1],4,-1530992060),a=g(a,c,f,i,n[h+4],11,1272893353),i=g(i,a,c,f,n[h+7],16,-155497632),f=g(f,i,a,c,n[h+10],23,-1094730640),c=g(c,f,i,a,n[h+13],4,681279174),a=g(a,c,f,i,n[h],11,-358537222),i=g(i,a,c,f,n[h+3],16,-722521979),f=g(f,i,a,c,n[h+6],23,76029189),c=g(c,f,i,a,n[h+9],4,-640364487),a=g(a,c,f,i,n[h+12],11,-421815835),i=g(i,a,c,f,n[h+15],16,530742520),c=m(c,f=g(f,i,a,c,n[h+2],23,-995338651),i,a,n[h],6,-198630844),a=m(a,c,f,i,n[h+7],10,1126891415),i=m(i,a,c,f,n[h+14],15,-1416354905),f=m(f,i,a,c,n[h+5],21,-57434055),c=m(c,f,i,a,n[h+12],6,1700485571),a=m(a,c,f,i,n[h+3],10,-1894986606),i=m(i,a,c,f,n[h+10],15,-1051523),f=m(f,i,a,c,n[h+1],21,-2054922799),c=m(c,f,i,a,n[h+8],6,1873313359),a=m(a,c,f,i,n[h+15],10,-30611744),i=m(i,a,c,f,n[h+6],15,-1560198380),f=m(f,i,a,c,n[h+13],21,1309151649),c=m(c,f,i,a,n[h+4],6,-145523070),a=m(a,c,f,i,n[h+11],10,-1120210379),i=m(i,a,c,f,n[h+2],15,718787259),f=m(f,i,a,c,n[h+9],21,-343485551),c=d(c,r),f=d(f,e),i=d(i,o),a=d(a,u);return[c,f,i,a]}function a(n){for(var t="",r=32*n.length,e=0;e<r;e+=8)t+=String.fromCharCode(n[e>>5]>>>e%32&255);return t}function h(n){var t=[];for(t[(n.length>>2)-1]=void 0,e=0;e<t.length;e+=1)t[e]=0;for(var r=8*n.length,e=0;e<r;e+=8)t[e>>5]|=(255&n.charCodeAt(e/8))<<e%32;return t}function e(n){for(var t,r="0123456789abcdef",e="",o=0;o<n.length;o+=1)t=n.charCodeAt(o),e+=r.charAt(t>>>4&15)+r.charAt(15&t);return e}function r(n){return unescape(encodeURIComponent(n))}function o(n){return a(i(h(t=r(n)),8*t.length));var t}function u(n,t){return function(n,t){var r,e,o=h(n),u=[],c=[];for(u[15]=c[15]=void 0,16<o.length&&(o=i(o,8*n.length)),r=0;r<16;r+=1)u[r]=909522486^o[r],c[r]=1549556828^o[r];return e=i(u.concat(h(t)),512+8*t.length),a(i(c.concat(e),640))}(r(n),r(t))}function t(n,t,r){return t?r?u(t,n):e(u(t,n)):r?o(n):e(o(n))}"function"==typeof define&&define.amd?define(function(){return t}):"object"==typeof module&&module.exports?module.exports=t:n.md5=t}(this);
+   
+    var gitalk = new Gitalk({
+        clientID: 'a29d09c438531919bb29',
+        clientSecret: '1f8eeea1d59ab0d1cba2adad1ea984b4883382e1',
+        id: md5(window.location.pathname),
+        repo: 'tastynoob.github.io',
+        owner: 'tastynoob',
+        admin: 'tastynoob'
+    })
+    gitalk.render('gitalk')
+</script>
+</section>
+  </div>
+</div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/combine/npm/lazysizes@5.1.0/lazysizes.min.js,gh/highlightjs/cdn-release@9.15.8/build/highlight.min.js,npm/mdui@0.4.3/dist/js/mdui.min.js?v=1"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
+ <script src="/js/app.js?v=1621174569845"></script>
+
+  
+
+
+
+
+
+</body>
+
+</html>
