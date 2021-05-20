@@ -4,7 +4,7 @@
 
 <head>
   
-  <title>arm汇编汇总 - [哧溜]的秘密空间</title>
+  <title>学习FPGA-4：点个灯 - [哧溜]的秘密空间</title>
   <meta charset="UTF-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,25 +12,36 @@
   
 
   <link rel="shortcut icon" href="/icon.png" type="image/png" />
-  <meta name="description" content="当初学stm32时因为一个想法，然后就走入了arm汇编的世界，这里就来汇总一下。">
+  <meta name="description" content="点灯">
 <meta property="og:type" content="article">
-<meta property="og:title" content="arm汇编汇总">
-<meta property="og:url" content="http://tastynoob.github.io/2020/12/22/arm/index.html">
+<meta property="og:title" content="学习FPGA-4：点个灯">
+<meta property="og:url" content="http://tastynoob.github.io/2021/05/18/FPGA4/index.html">
 <meta property="og:site_name" content="[哧溜]的秘密空间">
-<meta property="og:description" content="当初学stm32时因为一个想法，然后就走入了arm汇编的世界，这里就来汇总一下。">
+<meta property="og:description" content="点灯">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://tastynoob.github.io/2020/12/22/arm/p1.png">
-<meta property="article:published_time" content="2020-12-22T06:28:06.864Z">
-<meta property="article:modified_time" content="2021-03-23T04:08:30.544Z">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/HUFIkWMdonACr6h.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/3QXlZqsNWxiJGav.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/rmpOIGRy7JjXDxS.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/X8BDybFMKmJHpnE.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/MgRLCrn4E65idmT.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/wNtkhzJ2y7p4W8E.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/sD9leIkfBW6VAqQ.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/6TZRx4SKYPrCXq8.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/cSeLGFpCkjTEOXx.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/1wVe7K2sJRlfmDN.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/DuFmqKhApT2dVQc.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/XKJ6qxm7p3VTnEY.png">
+<meta property="article:published_time" content="2021-05-18T08:47:32.856Z">
+<meta property="article:modified_time" content="2021-05-18T10:30:11.348Z">
 <meta property="article:author" content="[哧溜]">
-<meta property="article:tag" content="arm">
+<meta property="article:tag" content="verilog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://tastynoob.github.io/2020/12/22/arm/p1.png">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/18/HUFIkWMdonACr6h.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1621512520612">
+  <link rel="stylesheet" href="/css/style.css?v=1621512520588">
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -195,16 +206,16 @@
     <div class="nexmoe-primary">
         <div class="nexmoe-post">
   
-      <div class="nexmoe-post-cover" style="padding-bottom: 50.5%;"> 
-          <img data-src="/images/cover/cover0.jpg" data-sizes="auto" alt="arm汇编汇总" class="lazyload">
-          <h1>arm汇编汇总</h1>
+      <div class="nexmoe-post-cover" style="padding-bottom: 62.5%;"> 
+          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="学习FPGA-4：点个灯" class="lazyload">
+          <h1>学习FPGA-4：点个灯</h1>
       </div>
   
   
   <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2020年12月22日</a>
-    <a><i class="nexmoefont icon-areachart"></i>957 字</a>
-    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 4 分钟</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月18日</a>
+    <a><i class="nexmoefont icon-areachart"></i>795 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 3 分钟</a>
 </div>
 
   <div class="nexmoe-post-right">
@@ -220,62 +231,103 @@
   </div>
 
   <article>
-    <p>当初学<font color="blue">stm32</font>时因为一个想法，然后就走入了arm汇编的世界，这里就来汇总一下。</p>
+    <p>点灯</p>
 <a id="more"></a>
 
-<p><strong>stm32的arm处理一般有7个运行模式，分别为：</strong></p>
-<p>​    <a>① 用户模式（USR）： 用于正常执行程序（The normal ARM program execution state）</a></p>
-<p>​    <a>② 快速中断模式（FIQ）： 用于高速数据传输（Designed to support a data transfer or channel process）</a></p>
-<p>​    <a>③ 外部中断模式（IRQ）： 用于通常的中断处理（Used for general-purpose interrupt handling）</a></p>
-<p>​    <a>④ 管理模式（SVC）： 操作系统使用的保护模式（Protected mode for the operating system）</a></p>
-<p>​    <a>⑤ 数据访问终止模式（ABT）： 当数据或指令预取终止时进入该模式（Entered after a data or instruction prefetch abort）</a></p>
-<p>​    <a>⑥ 系统模式（SYS）： 运行具有特权的操作系统任务（A privileged user mode for the operating system）</a>&gt;</p>
-<p>​    <a>⑦ 未定义指令异常模式（UND）： 当未定义的指令执行时进入该模式（Entered when an undefined instruction is executed）</a></p>
-<p>&lt;&gt;注：ARM微处理器的运行模式可以通过软件改变（<font color="red">修改CPSR后5位</font>），也可以通过中断或者异常处理改变</p>
-<p>每个运行模式下访问的寄存器都有一定的区别</p>
-<p>在ARM处理器内部共有37个用户可访问的寄存器，分别为</p>
-<p>31个通用的32位寄存器和6个状态寄存器</p>
-<p><img data-fancybox="gallery" data-sizes="auto" data-src="/2020/12/22/arm/p1.png" alt="如不能显示图片，请刷新网页" class="lazyload"></p>
-<p>其中的特殊寄存器：<br>r14：lr寄存器，用来保存pc值<br>r13：sp寄存器，栈顶寄存器</p>
-<p><strong>常用指令:</strong></p>
-<pre><code class="asm">mov r0,r1   ;r0 = r1
-mov r0,#0x1 ;r0 = 0x1
-mov r0,r1,lsl #3 ;r0 = r1&lt;&lt;3 逻辑左移(asl算数左移)
-mov r0,r1,lsr #3 ;r0 = r1&gt;&gt;3 逻辑右移,高位补0 (asr算数右移，高位补符号位)
-ldr r0,[r1] ;将r1对应的指针指向的值存入r0
-str r0,[r1] ;将r0存入r1对应的指针指向的地址
-;比较指令
-cmp r0,r1 ;将r0与r1的值相减，并根据结果设置cpsr的标志位
-cmp r0,#100；将r0与100相减，并根据结果设置cpsr的标志位
-tst r0,r1 ;把r0的内容和r1的内容或立即数进行按位的与运算，并根据运算结果更新CPSR中条件标志位的值。
-;运算指令
-add  r0,r1,r2      ;R0 = R1 + R2
-add  r0,r1,#256        ;R0 = R1 + 256
-add  r0,r2,r3,lsl#1    ;R0 = R2 + (R3 &lt;&lt; 1)
-orr  r0,r1,r2 ;将r1与r2或立即数做或按位运算并放入r0
-;跳转指令
-b label ;直接跳转到label处
-bl label ;直接跳转到label处，并将当前的pc值存入r14
-;伪指令
-push &#123;r0&#125; ;压栈入栈,注意stm32压栈为向下压栈,即sp=sp-4
-pop &#123;r0&#125;</code></pre>
-<p><font color="red">PS:</font> “#0x1”是立即数，立即数是指，能够用0-255之内的数据循环右移偶数位得到的数</p>
-<p>判断规则如下：</p>
-<ol>
-<li>把数据转换成二进制形式，从低位到高位写成4位1组的形式，最高位一组不够4位的，在最高位前面补0。</li>
-<li>数1的个数，如果大于8个肯定不是立即数，如果小于等于8进行下面步骤。</li>
-<li>如果数据中间有连续的大于等于24个0,循环左移2的倍数，使高位全为0。</li>
-<li>找到最高位的1，去掉前面最大偶数个0。</li>
-<li>找到最低位的1，去掉后面最大偶数个0。</li>
-<li>数剩下的位数，如果小于等于8位，那么这个数就是立即数，反之就不是立即数。</li>
-</ol>
-<p><strong>函数调用规则:</strong></p>
-<ol>
-<li>函数调用时会执行“BL func”指令</li>
-<li>函数参数传递通过r0~r4寄存器，多余参数通过栈传递</li>
-<li>进入函数后会执行一条“push {lr}”指令(根据不同情况，会压入其它寄存器)</li>
-<li>退出函数时通过r0返回结果，并执行“pop {pc}”(根据不同情况，会弹出其它值到另外的寄存器)</li>
-</ol>
+<p>环境配置好后就正式进入verilog的学习了</p>
+<p>先从最简单的点灯开始</p>
+<p>我会向你们介绍最基础的数据类型和语法规则</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/HUFIkWMdonACr6h.png" alt="1" class="lazyload"></p>
+<p>仍然是从我们熟悉的界面开始</p>
+<p>转到顶层模块 start中</p>
+<hr>
+<p>首先，verilog都是以模块为单位进行编程</p>
+<p>模块以 <strong>“module” “endmodule”</strong> 作为界限</p>
+<p>如图既是定义一个模块start,即顶层模块</p>
+<p>当然，可以定义其它模块再设置为顶层模块</p>
+<hr>
+<p>首先，一个电路模块肯定有输入输出    </p>
+<p>还有寄存器，逻辑控制什么的</p>
+<p>先附上点灯代码</p>
+<pre><code class="verilog">module start(
+    input button,//按键输入
+    output[2:0] led//3个led输出
+ );
+reg[2:0] dat=3&#39;b111; //3个led的状态寄存器
+assign led = dat;//将寄存器的3个值连接到led输出
+
+//当检测到按键下降沿时触发
+always@(negedge button) begin
+    //下面与c语言类似
+    //但也有很大的区别
+    if(dat == 3&#39;b000)begin
+        dat = 3&#39;b111;
+    end
+    else begin    
+        dat = dat - 3&#39;b1;    
+    end
+end
+//结束
+endmodule</code></pre>
+<p>这里看不懂没关系</p>
+<p>后面再慢慢解释</p>
+<p>先将这些代码写入顶层模块</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/3QXlZqsNWxiJGav.png" alt="2" class="lazyload"></p>
+<p>然后保存一遍， <strong>注意：一定要保存！！</strong></p>
+<p>既然有了代码，那么该如何点灯呢？</p>
+<p>既不像51直接“led=1”</p>
+<p>也不直接操作寄存器</p>
+<p><strong>这里FPGA采用了一种管脚映射的方式</strong></p>
+<p>打开TD软件的“Tools”菜单,点击“IO Constraint”</p>
+<p>即可看到引脚设置界面</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/rmpOIGRy7JjXDxS.png" alt="3" class="lazyload"></p>
+<p>图正中的即芯片管脚图</p>
+<p>而下面就会出现我们定义的几个输入输出通道</p>
+<p>分别是:</p>
+<p>button 对应K16引脚</p>
+<p>led[0~2]分别对应R3，J14，P13这三个引脚</p>
+<p>从开发板的原理图中可以看到</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/X8BDybFMKmJHpnE.png" alt="4" class="lazyload"></p>
+<p>K16引脚对应“user”按钮</p>
+<p>R3,J14,P13对应led_red,green,blue</p>
+<p>利用管脚映射即可实现verilog模块对外部引脚的控制</p>
+<p>设置好引脚后，即可关闭引脚编辑器</p>
+<p><strong>关闭时，它会提示你进行保存，点击确定，并保存引脚设置文件</strong></p>
+<p>此时，你的项目中就会多出一个 <strong>引脚设置文件：“.adc”</strong></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/MgRLCrn4E65idmT.png" alt="5" class="lazyload"></p>
+<p>这样，点灯程序就完全配置完成了</p>
+<p>接下来就是编译，烧录</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/wNtkhzJ2y7p4W8E.png" alt="6" class="lazyload"></p>
+<p>点击此按钮进行编译</p>
+<p>如果提示：没有license</p>
+<p>参加<a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/506">这篇帖子</a></p>
+<hr>
+<p>接下来就是烧录</p>
+<p>使用micro-usb线插上tang permier</p>
+<p>烧录要更新驱动</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/sD9leIkfBW6VAqQ.png" alt="7" class="lazyload"></p>
+<p>如果没有该设备</p>
+<p>那么可能是这2个中的任意一个</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/6TZRx4SKYPrCXq8.png" alt="no_driver_win10.png" class="lazyload"></p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/cSeLGFpCkjTEOXx.png" alt="no_driver.png" class="lazyload"></p>
+<p>选择最可能是tang permier的设备</p>
+<p>右键-更新驱动程序-浏览我的电脑以查找驱动程序</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/1wVe7K2sJRlfmDN.png" alt="7" class="lazyload"></p>
+<p>选择安路TD软件安装目录下的driver里选择正确的驱动</p>
+<p>我的电脑是win10 64位，因此选择win8_10_64驱动</p>
+<p>点击下一步进行安装</p>
+<hr>
+<p>驱动更新完成后</p>
+<p>再打开安路TD</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/DuFmqKhApT2dVQc.png" alt="8" class="lazyload"></p>
+<p>点击此按钮进入烧录界面</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/18/XKJ6qxm7p3VTnEY.png" alt="9" class="lazyload"></p>
+<p>根据图示进行烧录即可完成</p>
+<hr>
+<p>烧录完成后</p>
+<p>按下板子上的user按钮，就会发现led出现变换闪烁</p>
+<p>主要还是因为按键抖动的原因导致时序错误</p>
+<p>这个可以不用担心芯片是否会损坏</p>
 
   </article>
 
@@ -283,7 +335,7 @@ pop &#123;r0&#125;</code></pre>
     
   <div class="nexmoe-post-copyright">
     <strong>Author：</strong>[哧溜]<br>
-    <strong>Link：</strong><a href="http://tastynoob.github.io/2020/12/22/arm/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2020&#x2F;12&#x2F;22&#x2F;arm&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2020&#x2F;12&#x2F;22&#x2F;arm&#x2F;</a><br>
+    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/05/18/FPGA4/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;18&#x2F;FPGA4&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;18&#x2F;FPGA4&#x2F;</a><br>
     
       <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
@@ -294,10 +346,10 @@ pop &#123;r0&#125;</code></pre>
   
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
-        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
     
     
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/arm/" rel="tag">arm</a>
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/verilog/" rel="tag">verilog</a>
     
 </div>
 
@@ -334,7 +386,7 @@ pop &#123;r0&#125;</code></pre>
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1621512520613"></script>
+ <script src="/js/app.js?v=1621512520589"></script>
 
   
 
