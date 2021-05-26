@@ -4,7 +4,7 @@
 
 <head>
   
-  <title>GD32V运行速度慢的解决方法 - [哧溜]的秘密空间</title>
+  <title>学习FPGA-5：仿真 - [哧溜]的秘密空间</title>
   <meta charset="UTF-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,23 +12,31 @@
   
 
   <link rel="shortcut icon" href="/icon.png" type="image/png" />
-  <meta name="description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数里开启了类似于低功耗模式的功能">
+  <meta name="description" content="仿真">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GD32V运行速度慢的解决方法">
-<meta property="og:url" content="http://tastynoob.github.io/2021/05/09/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:title" content="学习FPGA-5：仿真">
+<meta property="og:url" content="http://tastynoob.github.io/2021/05/23/FPGA5/index.html">
 <meta property="og:site_name" content="[哧溜]的秘密空间">
-<meta property="og:description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数里开启了类似于低功耗模式的功能">
+<meta property="og:description" content="仿真">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-05-09T03:40:13.662Z">
-<meta property="article:modified_time" content="2021-05-09T03:42:13.250Z">
+<meta property="og:image" content="https://i.loli.net/2021/05/23/FGt6rCfJQloSBpk.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/23/mgvWcoSh5lnEODH.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/23/FLbDaeKuZhJ3mwr.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/23/WyTbw6m7XjdKCLt.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/23/FwxB2t6Q7q1TjAh.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/23/QhTlmc2CJXfj7D3.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/23/OftkLJpxa95ymrb.png">
+<meta property="article:published_time" content="2021-05-23T08:58:50.540Z">
+<meta property="article:modified_time" content="2021-05-23T09:37:54.245Z">
 <meta property="article:author" content="[哧溜]">
-<meta property="article:tag" content="riscv">
+<meta property="article:tag" content="verilog">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/23/FGt6rCfJQloSBpk.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1622027846527">
+  <link rel="stylesheet" href="/css/style.css?v=1622027846521">
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -193,15 +201,15 @@
     <div class="nexmoe-primary">
         <div class="nexmoe-post">
   
-      <div class="nexmoe-post-cover" style="padding-bottom: NaN%;"> 
-          <img data-src="/images/lsp/2.jpg" data-sizes="auto" alt="GD32V运行速度慢的解决方法" class="lazyload">
-          <h1>GD32V运行速度慢的解决方法</h1>
+      <div class="nexmoe-post-cover" style="padding-bottom: 62.5%;"> 
+          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="学习FPGA-5：仿真" class="lazyload">
+          <h1>学习FPGA-5：仿真</h1>
       </div>
   
   
   <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月09日</a>
-    <a><i class="nexmoefont icon-areachart"></i>329 字</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月23日</a>
+    <a><i class="nexmoefont icon-areachart"></i>430 字</a>
     <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
 </div>
 
@@ -218,48 +226,53 @@
   </div>
 
   <article>
-    <p>使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右</p>
-<p>这个问题实际上是由于官方提供的时钟初始化函数里开启了类似于低功耗模式的功能</p>
+    <p>仿真</p>
 <a id="more"></a>
 
-<p>导致核心频率达不到真正的频率，出现定时器延时错误</p>
-<p>我们只需要把该功能关掉即可</p>
-<p>在启动汇编文件里可以看到该函数：</p>
-<pre><code>
-        .section .init
 
-    .weak  eclic_msip_handler
-    .weak  eclic_mtip_handler
-    .weak  eclic_bwei_handler</code></pre>
-<p>其中的.init就是被放在0x8000000flash开头地址的初始化函数，</p>
-<p>找到改函数_init()</p>
-<pre><code>
-void _init()
-&#123;
-    SystemInit();
-
-    //ECLIC init
-    eclic_init(ECLIC_NUM_INTERRUPTS);
-    eclic_mode_enable();
-
-    //printf(&quot;After ECLIC mode enabled, the mtvec value is %x \n\n\r&quot;, read_csr(mtvec));
-
-    // // It must be NOTED:
-    //  //    * In the RISC-V arch, if user mode and PMP supported, then by default if PMP is not configured
-    //  //      with valid entries, then user mode cannot access any memory, and cannot execute any instructions.
-    //  //    * So if switch to user-mode and still want to continue, then you must configure PMP first
-    //pmp_open_all_space();
-    //switch_m2u_mode();
-
-    /* Before enter into main, add the cycle/instret disable by default to save power,
-    only use them when needed to measure the cycle/instret */
-    disable_mcycle_minstret();
-&#125;
-</code></pre>
-<p>可以看到这里有个函数十分可疑，而且官方也打了注释</p>
-<p><code>disable_mcycle_minstret()</code></p>
-<p>就是这个函数，开启了类似低功耗模式的功能，我们只需把它注释掉即可</p>
-<p>重新编译，就会发现现在定时器延时能达到正确时间了</p>
+<p>在实际FPGA开发过程中</p>
+<p>我们不可能直接将代码烧录进板子里进行测试</p>
+<p>一是我们无法观察到其内部逻辑变换</p>
+<p>而是万一代码中的逻辑有问题</p>
+<p>直接进行甚至会导致芯片损坏</p>
+<p>毕竟FPGA无法像单片机那样可以利用串口打印等调试方法</p>
+<p>FPGA调试只能靠仿真</p>
+<p>依然是拿之前我们写的点灯代码做测试</p>
+<p>首先，仿真需要安装modelsim仿真工具  </p>
+<p>该软件的安装这里不做赘述</p>
+<p>软件、环境变量都配置好后开始</p>
+<hr>
+<p>首先FPGA仿真需要一个测试模块</p>
+<p>我们先添加一个测试模块 <strong>test.v</strong></p>
+<p>在进行仿真时，仿真软件就会模拟运行test.v这个模块</p>
+<p>点灯程序中，我们有3个输出和1个输入</p>
+<p>因此在模拟时我们需要给目标模块提供一个模拟的输入</p>
+<p>我们使用延时功能来产生一个固定频率的输入</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/23/FGt6rCfJQloSBpk.png" alt="1.png" class="lazyload"></p>
+<hr>
+<p>然后就是启动仿真</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/23/mgvWcoSh5lnEODH.png" alt="2.png" class="lazyload"></p>
+<p>选择如图菜单</p>
+<p>再点击 <strong>“Behavioral Simulatin”</strong></p>
+<p>即行为级仿真</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/23/FLbDaeKuZhJ3mwr.png" alt="3.png" class="lazyload"></p>
+<p>选择测试代码</p>
+<p>它会生成modelsim的仿真命令行</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/23/WyTbw6m7XjdKCLt.png" alt="4.png" class="lazyload"></p>
+<p>打开命令行，依次输入以上前3条指令即可启动modelsim</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/23/FwxB2t6Q7q1TjAh.png" alt="5.png" class="lazyload"></p>
+<p>在modelsim最下面的命令行一依次输入</p>
+<p>add wave *</p>
+<p>run 1ms</p>
+<p>然后鼠标指向仿真窗口，按住ctrl+滚动鼠标滚轮</p>
+<p>就能看见仿真的波形</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/23/QhTlmc2CJXfj7D3.png" alt="6.png" class="lazyload"></p>
+<p>可以右键某个信号，比如out信号</p>
+<p>选择properties</p>
+<p>将radix设置为“unsigned”即可选择信号的数据类型</p>
+<p>效果如下</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/23/OftkLJpxa95ymrb.png" alt="7.png" class="lazyload"></p>
+<p>这样二进制数据就能以无符号整数显示</p>
 
   </article>
 
@@ -267,7 +280,7 @@ void _init()
     
   <div class="nexmoe-post-copyright">
     <strong>Author：</strong>[哧溜]<br>
-    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/05/09/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;09&#x2F;GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;09&#x2F;GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&#x2F;</a><br>
+    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/05/23/FPGA5/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;23&#x2F;FPGA5&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;23&#x2F;FPGA5&#x2F;</a><br>
     
       <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
@@ -278,10 +291,10 @@ void _init()
   
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
-        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
     
     
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/riscv/" rel="tag">riscv</a>
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/verilog/" rel="tag">verilog</a>
     
 </div>
 
@@ -318,7 +331,7 @@ void _init()
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1622027846528"></script>
+ <script src="/js/app.js?v=1622027846522"></script>
 
   
 
