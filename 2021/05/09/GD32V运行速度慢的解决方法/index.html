@@ -12,15 +12,15 @@
   
 
   <link rel="shortcut icon" href="/icon.png" type="image/png" />
-  <meta name="description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数里开启了类似于低功耗模式的功能">
+  <meta name="description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数没有执行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GD32V运行速度慢的解决方法">
 <meta property="og:url" content="http://tastynoob.github.io/2021/05/09/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/index.html">
 <meta property="og:site_name" content="[哧溜]的秘密空间">
-<meta property="og:description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数里开启了类似于低功耗模式的功能">
+<meta property="og:description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数没有执行">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-05-09T03:40:13.662Z">
-<meta property="article:modified_time" content="2021-05-09T03:42:13.250Z">
+<meta property="article:modified_time" content="2021-05-26T13:23:41.969Z">
 <meta property="article:author" content="[哧溜]">
 <meta property="article:tag" content="riscv">
 <meta name="twitter:card" content="summary">
@@ -28,7 +28,7 @@
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1622027979723">
+  <link rel="stylesheet" href="/css/style.css?v=1622035443950">
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -201,7 +201,7 @@
   
   <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
     <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月09日</a>
-    <a><i class="nexmoefont icon-areachart"></i>329 字</a>
+    <a><i class="nexmoefont icon-areachart"></i>211 字</a>
     <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
 </div>
 
@@ -219,20 +219,12 @@
 
   <article>
     <p>使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右</p>
-<p>这个问题实际上是由于官方提供的时钟初始化函数里开启了类似于低功耗模式的功能</p>
+<p>这个问题实际上是由于官方提供的时钟初始化函数没有执行</p>
 <a id="more"></a>
 
-<p>导致核心频率达不到真正的频率，出现定时器延时错误</p>
-<p>我们只需要把该功能关掉即可</p>
-<p>在启动汇编文件里可以看到该函数：</p>
-<pre><code>
-        .section .init
-
-    .weak  eclic_msip_handler
-    .weak  eclic_mtip_handler
-    .weak  eclic_bwei_handler</code></pre>
-<p>其中的.init就是被放在0x8000000flash开头地址的初始化函数，</p>
-<p>找到改函数_init()</p>
+<p>导致核心频率达不到全频108MHz，出现定时器延时错误</p>
+<p>我们只需要把该功能开启即可</p>
+<p>找到该函数_init()</p>
 <pre><code>
 void _init()
 &#123;
@@ -256,10 +248,7 @@ void _init()
     disable_mcycle_minstret();
 &#125;
 </code></pre>
-<p>可以看到这里有个函数十分可疑，而且官方也打了注释</p>
-<p><code>disable_mcycle_minstret()</code></p>
-<p>就是这个函数，开启了类似低功耗模式的功能，我们只需把它注释掉即可</p>
-<p>重新编译，就会发现现在定时器延时能达到正确时间了</p>
+<p>在主函数开头里调用该函数即可</p>
 
   </article>
 
@@ -318,7 +307,7 @@ void _init()
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1622027979724"></script>
+ <script src="/js/app.js?v=1622035443951"></script>
 
   
 
