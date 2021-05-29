@@ -4,7 +4,7 @@
 
 <head>
   
-  <title>FPGA学习-2：开发板及Verilog介绍 - [哧溜]的秘密空间</title>
+  <title>FPGA进阶：手撸神经网络 - [哧溜]的秘密空间</title>
   <meta charset="UTF-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,26 +12,26 @@
   
 
   <link rel="shortcut icon" href="/icon.png" type="image/png" />
-  <meta name="description" content="开发板及verilog介绍">
+  <meta name="description" content="手撸神经网络">
 <meta property="og:type" content="article">
-<meta property="og:title" content="FPGA学习-2：开发板及Verilog介绍">
-<meta property="og:url" content="http://tastynoob.github.io/2021/05/16/FPGA2/index.html">
+<meta property="og:title" content="FPGA进阶：手撸神经网络">
+<meta property="og:url" content="http://tastynoob.github.io/2021/05/29/FPGA%E8%BF%9B%E9%98%B61/index.html">
 <meta property="og:site_name" content="[哧溜]的秘密空间">
-<meta property="og:description" content="开发板及verilog介绍">
+<meta property="og:description" content="手撸神经网络">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://i.loli.net/2021/05/16/2AjUkY8CclodXbr.jpg">
-<meta property="og:image" content="https://i.loli.net/2021/05/16/HT79FAGSVdMCktQ.png">
-<meta property="article:published_time" content="2021-05-16T09:09:56.544Z">
-<meta property="article:modified_time" content="2021-05-28T10:00:27.882Z">
+<meta property="og:image" content="https://i.loli.net/2021/05/29/TkqpgYHiUcmF4S2.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/29/z6u2mgJKvPORqxj.png">
+<meta property="article:published_time" content="2021-05-29T02:31:25.786Z">
+<meta property="article:modified_time" content="2021-05-29T10:24:18.885Z">
 <meta property="article:author" content="[哧溜]">
 <meta property="article:tag" content="verilog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2021/05/16/2AjUkY8CclodXbr.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/29/TkqpgYHiUcmF4S2.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1622284209897">
+  <link rel="stylesheet" href="/css/style.css?v=1622284209891">
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -197,15 +197,15 @@
         <div class="nexmoe-post">
   
       <div class="nexmoe-post-cover" style="padding-bottom: 62.5%;"> 
-          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="FPGA学习-2：开发板及Verilog介绍" class="lazyload">
-          <h1>FPGA学习-2：开发板及Verilog介绍</h1>
+          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="FPGA进阶：手撸神经网络" class="lazyload">
+          <h1>FPGA进阶：手撸神经网络</h1>
       </div>
   
   
   <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月16日</a>
-    <a><i class="nexmoefont icon-areachart"></i>356 字</a>
-    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月29日</a>
+    <a><i class="nexmoefont icon-areachart"></i>830 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 4 分钟</a>
 </div>
 
   <div class="nexmoe-post-right">
@@ -213,7 +213,7 @@
       <div class="nexmoe-fixed">
         <div class="nexmoe-valign">
             <div class="nexmoe-toc">
-                
+                <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E6%9D%A5%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E8%AF%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E8%A7%84%E6%A0%BC%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">首先来介绍一下该神经网络的规格：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%88%AB%E6%B3%A8%E6%84%8F%EF%BC%9A%E6%89%80%E6%9C%89%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%9D%87%E4%B8%BA%E5%8D%95%E7%B2%BE%E5%BA%A6%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">特别注意：所有的数据类型均为单精度浮点数</span></a></li></ol>
             </div>
         </div>
       </div>
@@ -221,50 +221,117 @@
   </div>
 
   <article>
-    <p>开发板及verilog介绍</p>
+    <p>手撸神经网络</p>
 <a id="more"></a>
-
-
-<p>我们将使用sipeed公司设计的tang permier开发板进行开发学习</p>
-<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/16/2AjUkY8CclodXbr.jpg" alt="tang.jpg" class="lazyload"></p>
-<p>这款开发板使用了国产EG4S20芯片</p>
-<p>拥有2万多个逻辑门单元</p>
-<p>价格仅100多，极具性价比</p>
-<p>可以在上面跑riscv开源架构cpu核心</p>
-<p>完全够用</p>
-<p>IDE我们使用官方的安路TD软件</p>
-<p>详细安装过程可去<a target="_blank" rel="noopener" href="https://tang.sipeed.com/en/">sipeed文档</a>上查看</p>
+<p>进过了之前的基础学习，想必大家应该对verilog有了个比较清晰的认识</p>
+<p>那么接下来，我们就来撸个神经网络吧！</p>
 <hr>
-<p>与开发程序类似</p>
-<p>开发FPGA同样有编程语言</p>
-<p>比如verilog，VHDL</p>
-<p>这里使用verilog作为核心开发语言</p>
-<p>如果你对C语言有一定的了解，有助于Verilog的快速上手。</p>
-<p>下面是一个简单的计数器</p>
-<pre><code class="verilog">module top(
-    input clk,
-    output reg[15:0] out_cnt
+<h3 id="首先来介绍一下该神经网络的规格："><a href="#首先来介绍一下该神经网络的规格：" class="headerlink" title="首先来介绍一下该神经网络的规格："></a>首先来介绍一下该神经网络的规格：</h3><p><strong>使用IEEE标准的32位浮点数运算</strong></p>
+<p><strong>网络大小为3*3*3</strong></p>
+<p><strong>激活函数使用relu</strong></p>
+<p><strong>神经网络为固定结构</strong></p>
+<p>使用组合电路，这意味着只要输入一个数据就能瞬间出来结果</p>
+<p>所有的电路模块均为组合逻辑</p>
+<hr>
+<p>使用到的基本资源：</p>
+<p>浮点运算器，浮点乘法器，浮点加法器，激活函数运算器</p>
+<h3 id="特别注意：所有的数据类型均为单精度浮点数"><a href="#特别注意：所有的数据类型均为单精度浮点数" class="headerlink" title="特别注意：所有的数据类型均为单精度浮点数"></a>特别注意：所有的数据类型均为单精度浮点数</h3><hr>
+<p><strong>首先是激活函数运算模块</strong></p>
+<pre><code>module Act_Func(
+    input[31:0] Xi,
+    output[31:0] Yo
 );
-initial begin
-    out_cnt = 16&#39;b0;
-end
-always@(clk) begin
-    if (out_cnt == 16&#39;d250)begin
-        out_cnt =0;
-    end
-    else begin
-        out_cnt = out_cnt + 16&#39;b1;
-    end
-end
+
+assign Yo = Xi[31] ? 32&#39;d0 : Xi;
+
 endmodule</code></pre>
-<p>verilog语言主要以模块为单位来描述一个电路结构   </p>
-<p>描述电路的方式有行为级描述，数据流描述，结构化描述</p>
-<p>越往后难度越高，更接近于原始电路设计，但逻辑控制越简单</p>
-<p>verilog将复杂的电路功能抽象为一个个模块(module)</p>
-<p>通过组合个各个模块来完成不同的电路</p>
-<p>并且verilog采用自顶向下的方式进行程序设计</p>
-<p><img src="https://i.loli.net/2021/05/16/HT79FAGSVdMCktQ.png"></p>
-<p>一步步完成各个模块再进行组合即完成一个基本的FPGA项目</p>
+<hr>
+<p><strong>浮点运算单元：</strong></p>
+<p>浮点运算单元比较复杂，这里不贴代码，</p>
+<pre><code>FPU_ADD(a,b,y);
+FPU_MUL(a,b,y);</code></pre>
+<hr>
+<p><strong>人工神经元模块：</strong></p>
+<pre><code>
+module Neural(
+    input[3*32-1:0] Xi,
+    input[3*32-1:0] Ws,//权重
+    input[31:0]  B,//偏执
+    output[31:0] Yo
+);
+
+wire[31:0] o[2:0];
+
+FPU_MUL f1(Xi[0*32+32-1:0*32],Ws[0*32+32-1:0*32],o[0]);
+FPU_MUL f2(Xi[1*32+32-1:1*32],Ws[1*32+32-1:1*32],o[1]);
+FPU_MUL f3(Xi[2*32+32-1:2*32],Ws[2*32+32-1:2*32],o[2]);
+
+
+wire[31:0] t[1:0],f;
+FPU_ADD f4(o[0],o[1],t[0]);
+FPU_ADD f5(o[2],t[0],t[1]);
+FPU_ADD f6(B,t[1],f);
+Act_Func act(f,Yo);
+endmodule
+</code></pre>
+<hr>
+<p><strong>神经网络层：</strong></p>
+<pre><code>module Layer(
+    input[3*32-1:0] Xi,
+    input[3*3*32-1:0] Ws,    
+    input[3*32-1:0] Bs,
+    output[3*32-1:0] Yo
+);    
+
+Neural n1(Xi,Ws[0*3*32+3*32-1:0*3*32],Bs[0*32+32-1:0*32],Yo[0*32+32-1:0*32]);
+Neural n2(Xi,Ws[1*3*32+3*32-1:1*3*32],Bs[1*32+32-1:1*32],Yo[1*32+32-1:1*32]);
+Neural n3(Xi,Ws[2*3*32+3*32-1:2*3*32],Bs[2*32+32-1:2*32],Yo[2*32+32-1:2*32]);
+
+endmodule
+</code></pre>
+<hr>
+<p><strong>神经网络：</strong></p>
+<pre><code>//3*3*3的神经网络
+module NetWork(
+    input[3*32-1:0] Xi,
+    output[3*32-1:0] Yo 
+);
+
+
+reg[3*3*3*32-1:0] ws = 
+&#123;
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC
+&#125;;
+
+reg[3*3*32-1:0] bs =
+&#123;
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,
+32&#39;h3DCCCCCC,32&#39;h3DCCCCCC,32&#39;h3DCCCCCC
+&#125;;
+
+
+wire[3*32-1:0] cen[1:0];
+Layer l1(Xi,ws[0*3*3*32+3*3*32-1:0*3*3*32],bs[0*3*32+3*32-1:0*3*32],cen[0]);
+Layer l2(cen[0],ws[1*3*3*32+3*3*32-1:1*3*3*32],bs[1*3*32+3*32-1:1*3*32],cen[1]);
+Layer l3(cen[1],ws[2*3*3*32+3*3*32-1:2*3*3*32],bs[2*3*32+3*32-1:2*3*32],Yo);
+
+endmodule
+</code></pre>
+<p>下面是仿真结果和电脑运行结果：<br><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/29/TkqpgYHiUcmF4S2.png" alt="1.png" class="lazyload"><br><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/29/z6u2mgJKvPORqxj.png" alt="2.png" class="lazyload"></p>
+<p>嗯，输出结果完全一样</p>
+<p>嗯，看着是不是非常nb呢，由于使用了组合电路</p>
+<p>因此这个模块只要输入数据就能瞬间输出数据</p>
+<p>但由于是固定的，写死了的神经网络，所以它的搭建十分麻烦</p>
+<p>完整代码<a target="_blank" rel="noopener" href="https://github.com/tastynoob/FPGA_networl.git">click me</a></p>
 
   </article>
 
@@ -272,7 +339,7 @@ endmodule</code></pre>
     
   <div class="nexmoe-post-copyright">
     <strong>Author：</strong>[哧溜]<br>
-    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/05/16/FPGA2/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;16&#x2F;FPGA2&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;16&#x2F;FPGA2&#x2F;</a><br>
+    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/05/29/FPGA%E8%BF%9B%E9%98%B61/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;29&#x2F;FPGA%E8%BF%9B%E9%98%B61&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;29&#x2F;FPGA%E8%BF%9B%E9%98%B61&#x2F;</a><br>
     
       <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
@@ -323,7 +390,7 @@ endmodule</code></pre>
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1622284209898"></script>
+ <script src="/js/app.js?v=1622284209891"></script>
 
   
 
