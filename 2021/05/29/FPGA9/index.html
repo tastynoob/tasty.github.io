@@ -4,7 +4,7 @@
 
 <head>
   
-  <title>[哧溜]的秘密空间</title>
+  <title>FPGA学习-8：简单的时序电路 - [哧溜]的秘密空间</title>
   <meta charset="UTF-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,24 +12,25 @@
   
 
   <link rel="shortcut icon" href="/icon.png" type="image/png" />
-  <meta name="description" content="三峡大学某菜鸡一位(后期再添加其他的东西)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="[哧溜]的秘密空间">
-<meta property="og:url" content="http://tastynoob.github.io/myself.html">
+  <meta name="description" content="简单的时序电路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA学习-8：简单的时序电路">
+<meta property="og:url" content="http://tastynoob.github.io/2021/05/29/FPGA9/index.html">
 <meta property="og:site_name" content="[哧溜]的秘密空间">
-<meta property="og:description" content="三峡大学某菜鸡一位(后期再添加其他的东西)">
+<meta property="og:description" content="简单的时序电路">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://tastynoob.github.io/images/header.jpg">
-<meta property="article:published_time" content="2021-03-11T09:46:37.394Z">
-<meta property="article:modified_time" content="2021-03-11T09:46:37.394Z">
+<meta property="og:image" content="https://i.loli.net/2021/05/29/RzojQeu2HbxyMVg.png">
+<meta property="article:published_time" content="2021-05-29T12:11:16.373Z">
+<meta property="article:modified_time" content="2021-05-29T14:19:03.718Z">
 <meta property="article:author" content="[哧溜]">
+<meta property="article:tag" content="verilog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://tastynoob.github.io/images/header.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/29/RzojQeu2HbxyMVg.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1622298257121">
+  <link rel="stylesheet" href="/css/style.css?v=1622298257126">
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -195,15 +196,15 @@
         <div class="nexmoe-post">
   
       <div class="nexmoe-post-cover" style="padding-bottom: 62.5%;"> 
-          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="" class="lazyload">
-          <h1></h1>
+          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="FPGA学习-8：简单的时序电路" class="lazyload">
+          <h1>FPGA学习-8：简单的时序电路</h1>
       </div>
   
   
   <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2021年03月11日</a>
-    <a><i class="nexmoefont icon-areachart"></i>19 字</a>
-    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月29日</a>
+    <a><i class="nexmoefont icon-areachart"></i>579 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 2 分钟</a>
 </div>
 
   <div class="nexmoe-post-right">
@@ -219,8 +220,128 @@
   </div>
 
   <article>
-    <p><img src="/images/header.jpg"></p>
-<p>三峡大学某菜鸡一位<br>(后期再添加其他的东西)</p>
+    <p>简单的时序电路</p>
+<a id="more"></a>
+
+<p>经过上一章的了解</p>
+<p>组合电路的最大优势就是能直接根据输入进行输出</p>
+<p>但其也有很多的缺点：占大量的电路资源，功耗较大，电路固定…</p>
+<p>这一次我们来讲基本的时序电路，写一个简单的时序控制电路</p>
+<p>再在此基础上将之前的组合电路乘法器改成时序电路</p>
+<hr>
+<p>首先我们要来了解下安路FPGA的时钟信号</p>
+<p>安路FPGA的外部24Mhz晶振信号由k14号引脚提供</p>
+<p>使用 <strong>“IO Constraint”</strong> 引脚映射工具</p>
+<p>将veilog模块的某一输入端口映射到k14引脚上即可得到24Mhz的时钟信号</p>
+<p>先来设计个简单的 <strong>“可变分频器”</strong></p>
+<p>代码如下：</p>
+<pre><code>module Start(
+    input clk,
+    input button,    
+    output[2:0] led
+);
+
+
+reg[31:0] pll,cnt;
+reg[2:0] out;
+
+assign led = ~out;
+
+initial begin
+    pll = 32&#39;d24000000;
+    cnt = 32&#39;d0;    
+    out = 3&#39;b001;
+end
+
+always @(posedge clk )begin
+    if(cnt &lt;= pll) begin
+        cnt = cnt + 32&#39;d1;     
+    end        
+    else begin    
+        cnt = 32&#39;d0;        
+        out = out &lt;&lt; 1;    
+        if(out == 3&#39;d0)begin        
+            out = 3&#39;b001;
+        end                            
+
+    end        
+end
+
+integer i=1;
+
+always @(posedge button)begin
+    case(i)
+        1:begin        
+            i=2;        
+            pll=32&#39;d12000000;
+        end            
+        2:begin    
+            i=3;        
+            pll=32&#39;d6000000;
+        end            
+        3:begin            
+            i=1;        
+            pll=32&#39;d24000000;
+        end        
+
+    endcase
+
+end    
+
+endmodule
+</code></pre>
+<p>引脚映射如下：</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/05/29/RzojQeu2HbxyMVg.png" alt="1.png" class="lazyload"></p>
+<p>正常编译再烧录进tang perimer里，led就会交错闪烁</p>
+<p>按下user按键，闪烁的频率就会发生改变</p>
+<p>这最简单的分频器设计</p>
+<hr>
+<p>接下来我们再尝试将上一节中的组合电路单周期乘法器改造</p>
+<p>变成时序电路多周期乘法器</p>
+<p>额，就不要说什么多此一举了</p>
+<p>我们的目的是学习</p>
+<p>代码如下</p>
+<pre><code>module Mul(
+    input clk, //时钟信号
+    input rst,    //复位信号
+    output reg flag,//是否完成信号
+    input[7:0] Ai, 
+    input[7:0] Bi, 
+    output reg[15:0] result
+);    
+
+reg[15:0] bi;
+
+initial begin
+    bi = &#123;8&#39;d0,Bi&#125;;
+    flag = 0;    
+    result= 0;
+end    
+
+integer i=0;
+
+always @(posedge clk or posedge rst) begin
+    if(rst == 1)begin
+        bi = Bi;
+        flag = 0;    
+        result = 0;        
+        i=0;
+    end            
+    else if(flag == 0)begin    
+        result = result + (Ai[i] ? bi:0);
+        bi = bi &lt;&lt; 1;        
+        i = i + 1;        
+        if(i&gt;=8)begin        
+            flag = 1;
+        end    
+    end
+end    
+
+endmodule
+</code></pre>
+<p>可以看到时序逻辑会比组合逻辑复杂得多</p>
+<p>但是也正是因为时序电路的“记忆性”</p>
+<p>让cpu这类复杂的运算电路得以实现</p>
 
   </article>
 
@@ -228,7 +349,7 @@
     
   <div class="nexmoe-post-copyright">
     <strong>Author：</strong>[哧溜]<br>
-    <strong>Link：</strong><a href="http://tastynoob.github.io/myself.html" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;myself.html" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;myself.html</a><br>
+    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/05/29/FPGA9/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;29&#x2F;FPGA9&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;29&#x2F;FPGA9&#x2F;</a><br>
     
       <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
@@ -239,6 +360,10 @@
   
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/verilog/" rel="tag">verilog</a>
     
 </div>
 
@@ -275,7 +400,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1622298257122"></script>
+ <script src="/js/app.js?v=1622298257127"></script>
 
   
 
