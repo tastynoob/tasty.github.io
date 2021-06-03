@@ -4,7 +4,7 @@
 
 <head>
   
-  <title>关于博客 - [哧溜]的秘密空间</title>
+  <title>FPGA学习-9：时序电路之串口通讯模块 - [哧溜]的秘密空间</title>
   <meta charset="UTF-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,24 +12,26 @@
   
 
   <link rel="shortcut icon" href="/icon.png" type="image/png" />
-  <meta name="description" content="没啥好介绍的一普通大学生闲来无事搞得玩的 博客使用github+hexo方式搭建 主题采用nexmoe">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于博客">
-<meta property="og:url" content="http://tastynoob.github.io/about.html">
+  <meta name="description" content="时序电路之串口通讯模块">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA学习-9：时序电路之串口通讯模块">
+<meta property="og:url" content="http://tastynoob.github.io/2021/06/02/FPGA10/index.html">
 <meta property="og:site_name" content="[哧溜]的秘密空间">
-<meta property="og:description" content="没啥好介绍的一普通大学生闲来无事搞得玩的 博客使用github+hexo方式搭建 主题采用nexmoe">
+<meta property="og:description" content="时序电路之串口通讯模块">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://tastynoob.github.io/images/header.jpg">
-<meta property="article:published_time" content="2020-12-25T13:32:41.290Z">
-<meta property="article:modified_time" content="2020-12-25T13:32:41.290Z">
+<meta property="og:image" content="https://i.loli.net/2021/06/03/bJHcEdBZDWOugNA.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/02/5lZkLGe7BVJK6mX.png">
+<meta property="article:published_time" content="2021-06-02T11:56:58.810Z">
+<meta property="article:modified_time" content="2021-06-03T03:15:56.432Z">
 <meta property="article:author" content="[哧溜]">
+<meta property="article:tag" content="verilog">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://tastynoob.github.io/images/header.jpg">
+<meta name="twitter:image" content="https://i.loli.net/2021/06/03/bJHcEdBZDWOugNA.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1622690634200">
+  <link rel="stylesheet" href="/css/style.css?v=1622690634203">
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -195,15 +197,15 @@
         <div class="nexmoe-post">
   
       <div class="nexmoe-post-cover" style="padding-bottom: 62.5%;"> 
-          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="关于博客" class="lazyload">
-          <h1>关于博客</h1>
+          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="FPGA学习-9：时序电路之串口通讯模块" class="lazyload">
+          <h1>FPGA学习-9：时序电路之串口通讯模块</h1>
       </div>
   
   
   <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2020年12月25日</a>
-    <a><i class="nexmoefont icon-areachart"></i>35 字</a>
-    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年06月02日</a>
+    <a><i class="nexmoefont icon-areachart"></i>539 字</a>
+    <a><i class="nexmoefont icon-time-circle-fill"></i>大概 2 分钟</a>
 </div>
 
   <div class="nexmoe-post-right">
@@ -219,10 +221,163 @@
   </div>
 
   <article>
-    <p><img src="/images/header.jpg"></p>
-<p>没啥好介绍的<br>一普通大学生闲来无事搞得玩的</p>
-<p>博客使用<a target="_blank" rel="noopener" href="https://github.com/tastynoob?tab=repositories">github</a>+<a target="_blank" rel="noopener" href="https://hexo.com/">hexo</a>方式搭建</p>
-<p>主题采用<a target="_blank" rel="noopener" href="https://github.com/theme-nexmoe/hexo-theme-nexmoe">nexmoe</a></p>
+    <p>时序电路之串口通讯模块 </p>
+<a id="more"></a>
+
+<p>通信是时序电路的基础之一</p>
+<p>要保证信息能够在不同模块直接准确传输</p>
+<p>通信协议是保证信息传输的格式要求</p>
+<p>那么下面我们就来设计个最简单的</p>
+<p>也是最基础的串口通信模块</p>
+<p>串口通信时序这里不做介绍</p>
+<hr>
+<p>该串口模块的功能描述如下：</p>
+<p>波特率9600</p>
+<p>停止位1</p>
+<p>校验位无</p>
+<p>接收字节后将字节加一发送回去</p>
+<hr>
+<p><strong>首先是PLL模块</strong></p>
+<p>PLL模块给串口模块提供稳定的时钟信号</p>
+<p>代码如下：</p>
+<pre><code>module PLL(
+    input[31:0] sub,
+    input clk,    
+    input rst,
+    output reg clk_out
+);    
+reg[31:0] cnt;
+
+initial begin
+    cnt = 32&#39;d1;
+    clk_out = 0;
+end    
+
+always @(posedge clk or negedge rst) begin
+    if (rst == 0) begin
+        cnt = 32&#39;d1;    
+        clk_out = 0;
+    end            
+    else if(cnt &lt; sub) begin    
+        cnt = cnt + 1;
+    end            
+    else if(cnt &gt;= sub) begin    
+        clk_out = ~clk_out;    
+        cnt = 32&#39;d1;
+    end
+end
+endmodule</code></pre>
+<hr>
+<p><strong>然后是串口模块</strong></p>
+<p>代码如下</p>
+<pre><code>module USART(
+    input clk,    //24Mhz
+    input rst,
+    input rx,
+    output reg tx
+);    
+
+reg[7:0] buff;
+reg[7:0] rx_shift;
+reg[7:0] tx_shift;
+
+initial begin
+    tx = 1;
+    buff = 0;    
+    rx_shift = 0;    
+    tx_shift = 0;
+end    
+
+wire clk0;
+PLL pll(
+.sub (32&#39;d1250),
+.clk (clk),
+.rst (rst),
+.clk_out (clk0)
+);
+
+integer rx_i = 0;
+integer tx_i = 0;
+integer rx_flag = 0;
+integer tx_flag = 0;
+integer send_flag = 0;
+
+always @(posedge clk0 or negedge rst)begin
+    if(rst == 0)begin
+        rx_i=0;    
+        tx_i = 0;
+        rx_flag=0;        
+        tx_flag = 0;        
+        tx = 1;
+        buff = 0;    
+        rx_shift = 0;        
+        tx_shift = 0;
+    end        
+    else begin
+        case(rx_flag)
+            0:begin    //起始位
+                if(rx==0)begin                
+                    rx_flag=1;
+                end
+            end
+            1:begin//数据位            
+                rx_shift = rx_shift + &#123;rx,7&#39;d0&#125;;
+                if(rx_i &lt; 7)begin                
+                    rx_shift = rx_shift &gt;&gt; 1;    
+                end    
+                rx_i = rx_i + 1;            
+                if (rx_i &gt;= 8)begin                
+                    rx_flag = 2;                    
+                    rx_i = 0;
+                end    
+            end    
+            2:begin//结束位        
+                if(rx == 1)begin        
+                    buff = rx_shift;                
+                    rx_shift = 0;            
+                    send_flag = 1;            
+                    rx_flag = 0;
+                end    
+            end    
+        endcase        
+
+        if( send_flag==1 )begin
+            case(tx_flag)    
+                0:begin        
+                    tx_shift = buff + 1;
+                    tx = 0;            
+                    tx_flag=1;
+                end
+                1:begin                    
+                    tx = tx_shift[0];    
+                    tx_shift = tx_shift &gt;&gt; 1;                
+                    tx_i = tx_i+1;                
+                    if(tx_i &gt;= 8)begin                    
+                        tx_flag = 2;                    
+                        tx_i = 0;
+                    end        
+                end            
+                2:begin                        
+                    tx = 1;            
+                    tx_flag = 0;    
+                    send_flag = 0;
+                end
+            endcase
+        end                
+    end    
+end
+
+endmodule</code></pre>
+<hr>
+<p>管脚映射如下：</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/03/bJHcEdBZDWOugNA.png" alt="0" class="lazyload"></p>
+<p>连接USB转串口模块</p>
+<p>使用串口调试软件进行测试：</p>
+<p>实际使用效果如下;</p>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="https://i.loli.net/2021/06/02/5lZkLGe7BVJK6mX.png" alt="1" class="lazyload"></p>
+<p>可以看到，我们发送一串十六进制数据</p>
+<p>它会自动将数据加一后再返回来</p>
+<p>可以证明我们的代码没有问题</p>
 
   </article>
 
@@ -230,7 +385,7 @@
     
   <div class="nexmoe-post-copyright">
     <strong>Author：</strong>[哧溜]<br>
-    <strong>Link：</strong><a href="http://tastynoob.github.io/about.html" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;about.html" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;about.html</a><br>
+    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/06/02/FPGA10/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;06&#x2F;02&#x2F;FPGA10&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;06&#x2F;02&#x2F;FPGA10&#x2F;</a><br>
     
       <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
@@ -241,6 +396,10 @@
   
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
+    
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/verilog/" rel="tag">verilog</a>
     
 </div>
 
@@ -277,7 +436,7 @@
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1622690634202"></script>
+ <script src="/js/app.js?v=1622690634204"></script>
 
   
 
