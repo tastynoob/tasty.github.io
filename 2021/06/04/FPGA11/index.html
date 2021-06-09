@@ -4,7 +4,7 @@
 
 <head>
   
-  <title>GD32V运行速度慢的解决方法 - [哧溜]的秘密空间</title>
+  <title>FPGA：8051内核移植 - [哧溜]的秘密空间</title>
   <meta charset="UTF-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
@@ -12,23 +12,23 @@
   
 
   <link rel="shortcut icon" href="/icon.png" type="image/png" />
-  <meta name="description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数没有执行">
+  <meta name="description" content="FPGA：8051内核移植">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GD32V运行速度慢的解决方法">
-<meta property="og:url" content="http://tastynoob.github.io/2021/05/09/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:title" content="FPGA：8051内核移植">
+<meta property="og:url" content="http://tastynoob.github.io/2021/06/04/FPGA11/index.html">
 <meta property="og:site_name" content="[哧溜]的秘密空间">
-<meta property="og:description" content="使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右 这个问题实际上是由于官方提供的时钟初始化函数没有执行">
+<meta property="og:description" content="FPGA：8051内核移植">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-05-09T03:40:13.662Z">
-<meta property="article:modified_time" content="2021-05-26T13:23:41.969Z">
+<meta property="article:published_time" content="2021-06-04T03:48:14.501Z">
+<meta property="article:modified_time" content="2021-06-04T03:51:30.534Z">
 <meta property="article:author" content="[哧溜]">
-<meta property="article:tag" content="riscv">
+<meta property="article:tag" content="verilog">
 <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/highlight.js@9.15.8/styles/atom-one-dark.css,gh/nexmoe/nexmoe.github.io@latest/lib/mdui_043tiny/css/mdui.css,gh/nexmoe/nexmoe.github.io@latest/lib/iconfont/iconfont.css,gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css?v=233" crossorigin>
   
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
   
-  <link rel="stylesheet" href="/css/style.css?v=1623226510745">
+  <link rel="stylesheet" href="/css/style.css?v=1623226510720">
 <meta name="generator" content="Hexo 5.3.0"></head>
 
 <body class="mdui-drawer-body-left">
@@ -193,15 +193,15 @@
     <div class="nexmoe-primary">
         <div class="nexmoe-post">
   
-      <div class="nexmoe-post-cover" style="padding-bottom: NaN%;"> 
-          <img data-src="/images/lsp/2.jpg" data-sizes="auto" alt="GD32V运行速度慢的解决方法" class="lazyload">
-          <h1>GD32V运行速度慢的解决方法</h1>
+      <div class="nexmoe-post-cover" style="padding-bottom: 62.5%;"> 
+          <img data-src="/images/BackGround.jpg" data-sizes="auto" alt="FPGA：8051内核移植" class="lazyload">
+          <h1>FPGA：8051内核移植</h1>
       </div>
   
   
   <div class="nexmoe-post-meta nexmoe-rainbow" style="margin:10px 0!important;">
-    <a><i class="nexmoefont icon-calendar-fill"></i>2021年05月09日</a>
-    <a><i class="nexmoefont icon-areachart"></i>211 字</a>
+    <a><i class="nexmoefont icon-calendar-fill"></i>2021年06月04日</a>
+    <a><i class="nexmoefont icon-areachart"></i>31 字</a>
     <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
 </div>
 
@@ -218,37 +218,12 @@
   </div>
 
   <article>
-    <p>使用longan mcu时，出现了延时1s却实际上感觉延时了5s左右</p>
-<p>这个问题实际上是由于官方提供的时钟初始化函数没有执行</p>
+    <p>FPGA：8051内核移植</p>
 <a id="more"></a>
 
-<p>导致核心频率达不到全频108MHz，出现定时器延时错误</p>
-<p>我们只需要把该功能开启即可</p>
-<p>找到该函数_init()</p>
-<pre><code>
-void _init()
-&#123;
-    SystemInit();
-
-    //ECLIC init
-    eclic_init(ECLIC_NUM_INTERRUPTS);
-    eclic_mode_enable();
-
-    //printf(&quot;After ECLIC mode enabled, the mtvec value is %x \n\n\r&quot;, read_csr(mtvec));
-
-    // // It must be NOTED:
-    //  //    * In the RISC-V arch, if user mode and PMP supported, then by default if PMP is not configured
-    //  //      with valid entries, then user mode cannot access any memory, and cannot execute any instructions.
-    //  //    * So if switch to user-mode and still want to continue, then you must configure PMP first
-    //pmp_open_all_space();
-    //switch_m2u_mode();
-
-    /* Before enter into main, add the cycle/instret disable by default to save power,
-    only use them when needed to measure the cycle/instret */
-    disable_mcycle_minstret();
-&#125;
-</code></pre>
-<p>在主函数开头里调用该函数即可</p>
+<p>代码全部都在<a target="_blank" rel="noopener" href="https://github.com/tastynoob/FPGA_verilog_R8051">GitHub仓库</a></p>
+<p>适用于任何fpga芯片</p>
+<p>推荐sipeed的tang perimer开发板</p>
 
   </article>
 
@@ -256,7 +231,7 @@ void _init()
     
   <div class="nexmoe-post-copyright">
     <strong>Author：</strong>[哧溜]<br>
-    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/05/09/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;09&#x2F;GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;05&#x2F;09&#x2F;GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&#x2F;</a><br>
+    <strong>Link：</strong><a href="http://tastynoob.github.io/2021/06/04/FPGA11/" title="http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;06&#x2F;04&#x2F;FPGA11&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;tastynoob.github.io&#x2F;2021&#x2F;06&#x2F;04&#x2F;FPGA11&#x2F;</a><br>
     
       <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
     
@@ -267,10 +242,10 @@ void _init()
   
   <div class="nexmoe-post-meta nexmoe-rainbow">
     
-        <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+        <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
     
     
-        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/riscv/" rel="tag">riscv</a>
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/verilog/" rel="tag">verilog</a>
     
 </div>
 
@@ -307,7 +282,7 @@ void _init()
 
 
 <script src="https://cdn.jsdelivr.net/gh/xtaodada/xtaodada.github.io@0.0.2/copy.js"></script>
- <script src="/js/app.js?v=1623226510746"></script>
+ <script src="/js/app.js?v=1623226510721"></script>
 
   
 
