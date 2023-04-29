@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>longan-gd32v vscode环境配置 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="longan-gd32v vscode环境配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="longan-gd32v vscode环境配置">
+<meta property="og:url" content="https://tastynoob.github.io/1970/01/01/longan1/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="longan-gd32v vscode环境配置">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/06/17/FLKfYGlbNxQZCmu.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/17/TycDsdN2S96XqZh.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/17/eUzTLBc1i4ubJpI.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/17/hMydrpcL7NDEg85.png">
+<meta property="og:image" content="https://i.loli.net/2021/06/17/64nSYRWxHuLEVta.png">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.132Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="riscv">
+<meta property="article:tag" content="vscode">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/06/17/FLKfYGlbNxQZCmu.png">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339184">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339184">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339184">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339184"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover"> 
+            <img src="/images/BackGround.jpg" alt="longan-gd32v vscode环境配置" loading="lazy">
+            <h1>longan-gd32v vscode环境配置</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">1970年01月01日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E5%85%B6%E5%AE%83/">其它</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>longan-gd32v vscode环境配置</p>
+<span id="more"></span>
+
+
+<p>首先你要在<a target="_blank" rel="noopener" href="https://code.visualstudio.com/">vscode官网</a>下载vscode最新版</p>
+<p>安装完成后，点击右侧的插件栏</p>
+<p>搜索 <strong>“EIDE”</strong> 插件</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/06/17/FLKfYGlbNxQZCmu.png" alt="1.png" data-caption="1.png" loading="lazy"></p>
+<p>点击安装即可，第一次使用可能需要.net环境支持</p>
+<p>另外还需要辅助插件 “c&#x2F;c++”,搜索安装即可</p>
+<p>重启vscode</p>
+<p>vscode侧边栏就会出现eide图标，点击</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/06/17/TycDsdN2S96XqZh.png" alt="2.png" data-caption="2.png" loading="lazy"></p>
+<p>你需要指定编译器才能实现对项目的编译<br>如果你没有选择任何工具链，那么“设置工具链路径”的图标是一个红色叉叉<br>点击设置工具链路径<br>它会要求你选择如下编译器<br>根据自己的实际情况来选择编译器路径<br>这里我们选择设置riscv gcc路径</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/06/17/eUzTLBc1i4ubJpI.png" alt="4.png" data-caption="4.png" loading="lazy"></p>
+<p>gd32 gcc工具链可以在<a target="_blank" rel="noopener" href="https://cloud.github0null.io/s/R4SY?path=/%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7">此地址</a>下载</p>
+<p>下载xpack-riscv-none-embed-gcc工具链</p>
+<p>解压</p>
+<p>在eide插件里选择riscv工具链路径</p>
+<p>路径即riscv gcc安装根目录</p>
+<hr>
+<p>接下来我们来新建项目</p>
+<p>EIDE插件已经为你提前准备好了longan gd32v的开发模板</p>
+<p>在EIDE插件中选择新建项目</p>
+<p>选择内置项目模板，往下拉</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/06/17/hMydrpcL7NDEg85.png" alt="0" data-caption="0" loading="lazy"></p>
+<p>选择新建gd32vf项目模板</p>
+<p>如果配置无误，即可看到1如下界面</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/06/17/64nSYRWxHuLEVta.png" alt="S145M_55__LYV~_UWOM6NCE.png" data-caption="S145M_55__LYV~_UWOM6NCE.png" loading="lazy"></p>
+<p>按下F7进行编译</p>
+<p>点击侧边栏EIDE插件，就可以看到当前项目的信息</p>
+<p>![_&#96;RU_VE_4BN7_6PB0__XSJK.png](<a target="_blank" rel="noopener" href="https://i.loli.net/2021/06/17/LYx9hUIPpbfjslg.png">https://i.loli.net/2021/06/17/LYx9hUIPpbfjslg.png</a>)</p>
+<p>你可对该项目的头文件包含路径，源文件包含路径进行更改</p>
+<p>接下来就可以开始愉快的开发了</p>
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/1970/01/01/longan1/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;longan1&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;longan1&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/riscv/" rel="tag">riscv</a> <a class="nexmoefont icon-tag-fill -none-link" href="/tags/vscode/" rel="tag">vscode</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339063"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

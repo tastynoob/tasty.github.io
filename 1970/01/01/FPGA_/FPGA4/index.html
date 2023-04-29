@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>FPGA学习-4：初步入门点个灯 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="点灯">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA学习-4：初步入门点个灯">
+<meta property="og:url" content="https://tastynoob.github.io/1970/01/01/FPGA_/FPGA4/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="点灯">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/HUFIkWMdonACr6h.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/3QXlZqsNWxiJGav.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/rmpOIGRy7JjXDxS.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/X8BDybFMKmJHpnE.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/MgRLCrn4E65idmT.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/wNtkhzJ2y7p4W8E.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/sD9leIkfBW6VAqQ.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/6TZRx4SKYPrCXq8.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/cSeLGFpCkjTEOXx.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/1wVe7K2sJRlfmDN.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/DuFmqKhApT2dVQc.png">
+<meta property="og:image" content="https://i.loli.net/2021/05/18/XKJ6qxm7p3VTnEY.png">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.120Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="verilog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/05/18/HUFIkWMdonACr6h.png">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339224">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339224">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339224">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339224"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover"> 
+            <img src="/images/BackGround.jpg" alt="FPGA学习-4：初步入门点个灯" loading="lazy">
+            <h1>FPGA学习-4：初步入门点个灯</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">1970年01月01日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>点灯</p>
+<span id="more"></span>
+
+<p>环境配置好后就正式进入verilog的学习了</p>
+<p>先从最简单的点灯开始</p>
+<p>我会向你们介绍最基础的数据类型和语法规则</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/HUFIkWMdonACr6h.png" alt="1" data-caption="1" loading="lazy"></p>
+<p>仍然是从我们熟悉的界面开始</p>
+<p>转到顶层模块 start中</p>
+<hr>
+<p>首先，verilog都是以模块为单位进行编程</p>
+<p>模块以 <strong>“module” “endmodule”</strong> 作为界限</p>
+<p>如图既是定义一个模块start,即顶层模块</p>
+<p>当然，可以定义其它模块再设置为顶层模块</p>
+<hr>
+<p>首先，一个电路模块肯定有输入输出    </p>
+<p>还有寄存器，逻辑控制什么的</p>
+<p>先附上点灯代码</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> start(</span><br><span class="line">	<span class="keyword">input</span> button,<span class="comment">//按键输入</span></span><br><span class="line">	<span class="keyword">output</span>[<span class="number">2</span>:<span class="number">0</span>] led<span class="comment">//3个led输出</span></span><br><span class="line"> );</span><br><span class="line"><span class="keyword">reg</span>[<span class="number">2</span>:<span class="number">0</span>] dat=<span class="number">3&#x27;b111</span>; <span class="comment">//3个led的状态寄存器</span></span><br><span class="line"><span class="keyword">assign</span> led = dat;<span class="comment">//将寄存器的3个值连接到led输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//当检测到按键下降沿时触发</span></span><br><span class="line"><span class="keyword">always</span>@(<span class="keyword">negedge</span> button) <span class="keyword">begin</span></span><br><span class="line">    <span class="comment">//下面与c语言类似</span></span><br><span class="line">    <span class="comment">//但也有很大的区别</span></span><br><span class="line">	<span class="keyword">if</span>(dat == <span class="number">3&#x27;b000</span>)<span class="keyword">begin</span></span><br><span class="line">		dat = <span class="number">3&#x27;b111</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">begin</span>	</span><br><span class="line">		dat = dat - <span class="number">3&#x27;b1</span>;	</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="comment">//结束</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+
+<p>这里看不懂没关系</p>
+<p>后面再慢慢解释</p>
+<p>先将这些代码写入顶层模块</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/3QXlZqsNWxiJGav.png" alt="2" data-caption="2" loading="lazy"></p>
+<p>然后保存一遍， <strong>注意：一定要保存！！</strong></p>
+<p>既然有了代码，那么该如何点灯呢？</p>
+<p>既不像51直接“led&#x3D;1”</p>
+<p>也不直接操作寄存器</p>
+<p><strong>这里FPGA采用了一种管脚映射的方式</strong></p>
+<p>打开TD软件的“Tools”菜单,点击“IO Constraint”</p>
+<p>即可看到引脚设置界面</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/rmpOIGRy7JjXDxS.png" alt="3" data-caption="3" loading="lazy"></p>
+<p>图正中的即芯片管脚图</p>
+<p>而下面就会出现我们定义的几个输入输出通道</p>
+<p>分别是:</p>
+<p>button 对应K16引脚</p>
+<p>led[0~2]分别对应R3，J14，P13这三个引脚</p>
+<p>从开发板的原理图中可以看到</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/X8BDybFMKmJHpnE.png" alt="4" data-caption="4" loading="lazy"></p>
+<p>K16引脚对应“user”按钮</p>
+<p>R3,J14,P13对应led_red,green,blue</p>
+<p>利用管脚映射即可实现verilog模块对外部引脚的控制</p>
+<p>设置好引脚后，即可关闭引脚编辑器</p>
+<p><strong>关闭时，它会提示你进行保存，点击确定，并保存引脚设置文件</strong></p>
+<p>此时，你的项目中就会多出一个 <strong>引脚设置文件：“.adc”</strong></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/MgRLCrn4E65idmT.png" alt="5" data-caption="5" loading="lazy"></p>
+<p>这样，点灯程序就完全配置完成了</p>
+<p>接下来就是编译，烧录</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/wNtkhzJ2y7p4W8E.png" alt="6" data-caption="6" loading="lazy"></p>
+<p>点击此按钮进行编译</p>
+<p>如果提示：没有license</p>
+<p>参加<a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/506">这篇帖子</a></p>
+<hr>
+<p>接下来就是烧录</p>
+<p>使用micro-usb线插上tang permier</p>
+<p>烧录要更新驱动</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/sD9leIkfBW6VAqQ.png" alt="7" data-caption="7" loading="lazy"></p>
+<p>如果没有该设备</p>
+<p>那么可能是这2个中的任意一个</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/6TZRx4SKYPrCXq8.png" alt="no_driver_win10.png" data-caption="no_driver_win10.png" loading="lazy"></p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/cSeLGFpCkjTEOXx.png" alt="no_driver.png" data-caption="no_driver.png" loading="lazy"></p>
+<p>选择最可能是tang permier的设备</p>
+<p>右键-更新驱动程序-浏览我的电脑以查找驱动程序</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/1wVe7K2sJRlfmDN.png" alt="7" data-caption="7" loading="lazy"></p>
+<p>选择安路TD软件安装目录下的driver里选择正确的驱动</p>
+<p>我的电脑是win10 64位，因此选择win8_10_64驱动</p>
+<p>点击下一步进行安装</p>
+<hr>
+<p>驱动更新完成后</p>
+<p>再打开安路TD</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/DuFmqKhApT2dVQc.png" alt="8" data-caption="8" loading="lazy"></p>
+<p>点击此按钮进入烧录界面</p>
+<p><img onerror="imgOnError(this);" data-fancybox="gallery" src="https://i.loli.net/2021/05/18/XKJ6qxm7p3VTnEY.png" alt="9" data-caption="9" loading="lazy"></p>
+<p>根据图示进行烧录即可完成</p>
+<hr>
+<p>烧录完成后</p>
+<p>按下板子上的user按钮，就会发现led出现变换闪烁</p>
+<p>主要还是因为按键抖动的原因导致时序错误</p>
+<p>这个可以不用担心芯片是否会损坏</p>
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/1970/01/01/FPGA_/FPGA4/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;FPGA_&#x2F;FPGA4&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;FPGA_&#x2F;FPGA4&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/verilog/" rel="tag">verilog</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339071"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>k210时钟树讲解 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="k210时钟树讲解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k210时钟树讲解">
+<meta property="og:url" content="https://tastynoob.github.io/1970/01/01/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="k210时钟树讲解">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tastynoob.github.io/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/0.jpg">
+<meta property="og:image" content="https://tastynoob.github.io/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/1.jpg">
+<meta property="og:image" content="https://tastynoob.github.io/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/2.jpg">
+<meta property="og:image" content="https://tastynoob.github.io/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/4.jpg">
+<meta property="og:image" content="https://tastynoob.github.io/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/3.jpg">
+<meta property="og:image" content="https://tastynoob.github.io/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/5.jpg">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.124Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="k210">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tastynoob.github.io/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/0.jpg">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339172">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339172">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339172">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339172"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="/images/lsp/1.jpg" alt="k210时钟树讲解" loading="lazy">
+            <h1>k210时钟树讲解</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">1970年01月01日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E5%85%B6%E5%AE%83/">其它</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>k210时钟树讲解      </p>
+<span id="more"></span>
+
+
+
+<p>首先来看看完整的k210时钟树</p>
+<p><img src="/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/0.jpg">    </p>
+<p>看着很复杂对吧，我们来一步一步分析看看  </p>
+<p>k210 总共有3个PLL倍频器 </p>
+<p>PLL0为内核和大部分外设提供时钟  </p>
+<p>PLL1为AI提供时钟</p>
+<p>PLL2为I2S提供时钟   </p>
+<p>每个PLL内部分别经过：</p>
+<p>CLKR（1~16）分频，CLKF（1~64）倍频，CLKOD（1~16）分频   </p>
+<p>输出时钟</p>
+<hr>
+<p>先来看看PLL0<br><img src="/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/1.jpg">   </p>
+<p>PLL0是最复杂的一部分    </p>
+<p>首先，外部26M晶振连入PLL0和ACLK MUX时钟选择器    </p>
+<p>PLL0由”PLL0 OUT EN“信号使能输出 </p>
+<p>PLL0时钟连入ACLK分频器，ACLK（2,4,8,16）分频器连入ACLK MUX时钟选择   </p>
+<p>通过控制”ACLK SEL“信号可选择ALCK时钟是PLL0输入还是26M晶振输入   </p>
+<p>ACLK时钟才是实际上为内核和大部分外设提供的时钟  </p>
+<p>由图可以看到</p>
+<p>ACLK时钟直接给CPU，DMA，SPI3，FFT,SRAM0,SRAM1提供时钟   </p>
+<p>ACLK下挂载着APB0~APB2和DVP，ROM这5个分频器  </p>
+<p>APB分频器可以提供1~8的分频</p>
+<p>每个分频器都有一个与之对应的使能信号    </p>
+<hr>
+<p>再来看看外设的一部分    </p>
+<p><img src="/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/2.jpg">   </p>
+<p>每个APB总线可单独堆ACLK分频，分频系数为1~8</p>
+<p>每个APB总线都有个“CLK EN GROUP” 时钟使能组  </p>
+<p>意思是每个APB总线上挂载的外设都有个与之对应的时钟使能信号   </p>
+<p>APB0上是常用的GPIO，UART，SPI等外设时钟 </p>
+<p>这里要注意一下，看到APB外设组旁边的几根虚线没？ </p>
+<p>这个连接的是一些特殊外设，包括TIMER，I2C，SPI，I2S，WDT，  </p>
+<p>它们的时钟实际上由专用的分频器提供  </p>
+<p>这意味这这几个外设可以更加灵活的在不同频率下工作而不会收到APB时钟影响  </p>
+<p>初此之外，APB1时钟还连接着OPT MUX时钟选择器 </p>
+<p>OPT MUX时钟选择器还可以选择由外部晶振经过2分频后的时钟</p>
+<p>APB1同时通过一个分频器组“APB1 CLK TH”输出APB1时钟</p>
+<hr>
+<p>下面来看看这些特殊外设  </p>
+<p><img src="/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/4.jpg"><br><img src="/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/3.jpg"><br><img src="/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/5.jpg"></p>
+<p>这里每个分频器都是分频器组</p>
+<p>都可以单独为这些外设SPI0，SPI1…TIMER0，TIMER1…   </p>
+<p>提供2~512的分频 </p>
+<p>其中还有个更特殊的外设SPI3  </p>
+<p>它有独立的时钟选择器，时钟非输出，2路SPI时钟输出    </p>
+<p>最下面还有RTC时钟，直接由外部晶振提供</p>
+<p>最上面就则是PLL1和PLL2  </p>
+<p>PLL1经过“AI GCLK TH”分频器给AI提供时钟  </p>
+<p>PLL2输入为MUX时钟选择器，可以由PLL1，PLL0和外部晶振提供输入 </p>
+<p>PLL2提供I2S高精度时钟</p>
+<hr>
+<p>因此，在实际裸机开发时要注意时钟的管理  </p>
+<p>可能会由于调整cpu频率而导致其它外设无法工作的情况   </p>
+<p>例如在PLL0频率达到600MHz的情况下使用SPI0设备    </p>
+<p>如果不对SPI0分频器进行分频，就有会导致SPI0时钟过大  </p>
+<p>k210时钟由“sysctl”寄存器组进行控制  </p>
+<p>时钟主要由这几个寄存器控制  </p>
+<p>PLL0，PLL1，PLL12 控制寄存器    </p>
+<p>时钟选择0、1寄存器  </p>
+<p>时钟频率设置0~6寄存器   </p>
+<p>由于寄存器设置位太多，这里不详细介绍    </p>
+<p>详细可参考k210寄存器手册    </p>
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/1970/01/01/k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;k210%E6%97%B6%E9%92%9F%E6%A0%91%E8%AE%B2%E8%A7%A3&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/k210/" rel="tag">k210</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339061"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

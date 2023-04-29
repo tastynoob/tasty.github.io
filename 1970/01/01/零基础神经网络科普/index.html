@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>零基础神经网络科普 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="简单的讲解一下人工神经网络的结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="零基础神经网络科普">
+<meta property="og:url" content="https://tastynoob.github.io/1970/01/01/%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="简单的讲解一下人工神经网络的结构">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tastynoob.github.io/%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE/0.gif">
+<meta property="og:image" content="https://tastynoob.github.io/%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE/1.gif">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.175Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tastynoob.github.io/%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE/0.gif">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339199">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339199">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339199">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339199"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="/images/lsp/3.jpg" alt="零基础神经网络科普" loading="lazy">
+            <h1>零基础神经网络科普</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">1970年01月01日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="nexmoefont icon-appstore-fill -link" href="/categories/%E5%85%B6%E5%AE%83/">其它</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>简单的讲解一下人工神经网络的结构</p>
+<span id="more"></span>
+
+
+<p><strong>首先</strong> 讲一下什么是人工神经网络<br>顾名思义，人工神经网络就是人为的模拟大脑的结构<br>从而让人工神经网络能够完成部分智能操作  </p>
+<p>人工神经网络正如模拟大脑的一样<br>它也由许多人工神经元组成    </p>
+<p>现实当中人脑的神经元会根据输入信号来输出相应的信号<br>由于人脑神经元的具体活动实在是太过复杂<br>因此人工神经元实际上会大大简化<br>最终，它的数学模型如下<br><img src="/%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE/0.gif"><br>它有多个输入，一个输出<br>每个输入都占有不同的权重<br>人工神经元内部会进行非线性运算，保证人工神经网络是非线性的</p>
+<p>此时，这个人工神经网络的数学表达式可以写为：</p>
+<h2 id="O-x3D-f-ΣYᵢWᵢ"><a href="#O-x3D-f-ΣYᵢWᵢ" class="headerlink" title="O &#x3D; f(ΣYᵢWᵢ) "></a>O &#x3D; f(ΣYᵢWᵢ) </h2><p>其中f()为激活函数，通常为非线性运算函数<br>例如sigmod函数<br>即对输入与对应的权重相乘的和进行非线性运算</p>
+<p>以上就是一个神经元的基本模型<br>大量的人工神经元呈平面组合在一起就形成了BP神经网络(平面神经网络)</p>
+<p><img src="/%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE/1.gif"></p>
+<p>可以看到，BP神经网络的输入和输出的位数取决于输入层的神经元数量，相当于2个多维向量<br>因此，再抽象一点，BP神经网络就相当于一个输入为n维的向量，输出为m维的向量的一个函数<br>该函数的内部构造就是一个如同上图的网络  </p>
+<p>而我们要做的，就是去控制这个函数，让它能完成类似人类大脑的工作  </p>
+<p><strong>那么如何去控制它呢</strong>  </p>
+<p>假如有一个未知函数放在你面前，要你去猜这个函数的构造<br>你唯一的方法就是尝试去输入一个值，看这个函数的计算结果是什么<br>比如给你一个函数 g(x) ，再给你1个输入数据<br>    g(0) &#x3D; 0<br>此时你还猜不到这个函数是什么,再来一个数据<br>    g(PI&#x2F;6) &#x3D; 1&#x2F;2<br>这时，你可能会想到g(x)&#x3D;sin(x)，但还不确认，如果<br>    g(PI&#x2F;4) &#x3D; √2&#x2F;2<br>此时，你会想到，该函数很大可能是g(x)&#x3D;sin(x),但凡事都可能有例外…</p>
+<p>如果给你无穷个数据都满足g(x)&#x3D;sin(x)，那么你可以确定该函数百分百就是g(x)&#x3D;sin(x)</p>
+<p>这里把输入未知函数的数据和该函数输出相应的值联合起来称为”输入输出数据对”</p>
+<hr>
+<p>实际上，神经网络就是这样的一个“猜谜”模型    </p>
+<hr>
+<p>之前说了,BP神经网络就是一个抽象的向量函数<br>我们要做的，就是不停的给它喂数据，让它去猜我们想要的函数<br>然后利用这个函数去计算我们输入的其它数据 </p>
+<hr>
+<p>例如，给一个BP神经网络不停的喂g(x) &#x3D; sin(x)这个输入输出数据对<br>那么这个神经网络就可能找到了输入输出的规律<br>下次你输入一个之前输入输出数据对当中没有出现的数据时，它就可能明白你的意思，输出对应的值    </p>
+<hr>
+<p>看到这里，你可能一头雾水，既然我已经知道了g(x)&#x3D;sin(x),那么我还让神经网络去猜g(x)干啥呢？<br>没错，让神经网络去猜g(x)函数时，它自己就变成了g(x)函数，这个过程被称为”拟合”    </p>
+<hr>
+<p>实际上，神经网络“拟合”的过程远比这复杂得多，别忘了，神经网络可以输入多个数据，输出多个数据<br>同时可以拟合任意函数，这意味着我们可以尝试输入一个手写数字图像，给它一个期望输出，让它去猜：<br>“输入手写数字图像，输出对应数字”这样的一个函数，这样一想，岂不妙哉？    </p>
+<hr>
+<p>有了“输入手写数字图像，输出对应数字”这样的一个函数，我们就可以拿它去完成人工才能完成的事<br>比如识别手写账单，几张账单可能对人类没啥压力，但如果几十万张呢，机器可不会休息，而这也是人工智能的核心：<br>代替人类完成”人类才能完成的工作”…   </p>
+<p>而这，仅仅是“平面”神经网络，后面还有更加强大的“立体”神经网络</p>
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/1970/01/01/%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;%E9%9B%B6%E5%9F%BA%E7%A1%80%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%A7%91%E6%99%AE&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339067"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#O-x3D-f-%CE%A3Y%E1%B5%A2W%E1%B5%A2"><span class="toc-number">1.</span> <span class="toc-text">O &#x3D; f(ΣYᵢWᵢ) </span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

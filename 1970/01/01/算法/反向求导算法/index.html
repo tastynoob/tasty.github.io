@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>反向求导算法 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="之前将了前向求导实现，现在就来讲一下反向求导实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反向求导算法">
+<meta property="og:url" content="https://tastynoob.github.io/1970/01/01/%E7%AE%97%E6%B3%95/%E5%8F%8D%E5%90%91%E6%B1%82%E5%AF%BC%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="之前将了前向求导实现，现在就来讲一下反向求导实现">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/img_convert/d23b3b8e9d814e00b45f854e477df00b.png">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.173Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/img_convert/d23b3b8e9d814e00b45f854e477df00b.png">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339265">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339265">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339265">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339265"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="/images/lsp/8.jpg" alt="反向求导算法" loading="lazy">
+            <h1>反向求导算法</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">1970年01月01日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>之前将了前向求导实现，现在就来讲一下反向求导实现</p>
+<span id="more"></span>
+
+<p>反向求导的数学基础是链式法则</p>
+<p>即求导的过程是从函数输出层开始，逐层向前求导，直到输入层，这样就可以求出每一层的梯度</p>
+<p>对于标量求导，即可以自动求出所有变量的梯度</p>
+<p>比如对于函数，利用链式法则求导</p>
+<p>$Y&#x3D;F·G,F&#x3D;a+b,G&#x3D;b+1$<br>$\frac{\partial Y}{\partial a}$<br>$&#x3D;\frac{\partial Y}{\partial F}·\frac{\partial F}{\partial a}+\frac{\partial Y}{\partial G}·\frac{\partial G}{\partial a}$<br>$&#x3D;G + 0$<br>$&#x3D;b + 1$</p>
+<p>其语法树如下：<br><img src="https://img-blog.csdnimg.cn/img_convert/d23b3b8e9d814e00b45f854e477df00b.png"><br>根据语法树求导,同路径下梯度相乘，不同路径梯度相加</p>
+<p>$\mathrm{d}a &#x3D; (b+1) \times 1,\mathrm{d}b&#x3D;(b+1) \times 1 + (a+b) \times 1$</p>
+<p>而不同的节点,比如加减乘除，其梯度的计算十分简单</p>
+<p>通过把一个复杂的表达式转换为一颗只包含基本运算的语法二叉树</p>
+<p>从上往下进行梯度迭代即可计算出每个变量的梯度</p>
+<p>这与前向求导只能计算$\mathrm{d}Y$不同,反向求导可以算出$\frac{\partial Y}{\partial a},\frac{\partial Y}{\partial a}$</p>
+<p>相加即可算出 $\mathrm{d}Y$</p>
+<p>因此在工程应用时也是反向求导居多</p>
+<p>以上就是反向求导的基本原理  </p>
+<p>现在我们来编写代码如何根据函数表达式构造语法二叉树  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> &#123;</span><br><span class="line">    CONST,</span><br><span class="line">    VAR,</span><br><span class="line">    ADD,</span><br><span class="line">    SUB,</span><br><span class="line">    MUL,</span><br><span class="line">    DIV,</span><br><span class="line">    POW,</span><br><span class="line">&#125;Operator;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Qtype</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Operator oper=CONST;</span><br><span class="line">    <span class="type">float</span> val;</span><br><span class="line">    <span class="type">float</span> grad = <span class="number">0</span>;</span><br><span class="line">    Qtype* left = <span class="literal">nullptr</span>;</span><br><span class="line">    Qtype* right = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="built_in">Qtype</span>() &#123;</span><br><span class="line">        oper = CONST;</span><br><span class="line">        val = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Qtype</span>(Operator oper) &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;oper = oper;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Qtype</span>(<span class="type">float</span> a) &#123;</span><br><span class="line">        val = a;</span><br><span class="line">        oper = CONST;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Qtype</span>(<span class="type">float</span> a, Operator oper) &#123;</span><br><span class="line">        val = a;</span><br><span class="line">        <span class="keyword">this</span>-&gt;oper = oper;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Qtype</span>(<span class="type">float</span> a, <span class="type">float</span> grad, Operator oper) &#123;</span><br><span class="line">        val = a;</span><br><span class="line">        <span class="keyword">this</span>-&gt;grad = grad;</span><br><span class="line">        <span class="keyword">this</span>-&gt;oper = oper;</span><br><span class="line">    &#125;</span><br><span class="line">    Qtype&amp; <span class="keyword">operator</span>+(Qtype&amp; other) &#123; </span><br><span class="line">        Qtype* res = <span class="keyword">new</span> <span class="built_in">Qtype</span>(ADD);</span><br><span class="line">        res-&gt;left = <span class="keyword">this</span>;</span><br><span class="line">        res-&gt;right = &amp;other;</span><br><span class="line">        <span class="keyword">return</span> *res;</span><br><span class="line">    &#125;</span><br><span class="line">    Qtype&amp; <span class="keyword">operator</span>-(Qtype&amp; other) &#123;</span><br><span class="line">        Qtype* res = <span class="keyword">new</span> <span class="built_in">Qtype</span>(SUB);</span><br><span class="line">        res-&gt;left = <span class="keyword">this</span>;</span><br><span class="line">        res-&gt;right = &amp;other;</span><br><span class="line">        <span class="keyword">return</span> *res;</span><br><span class="line">    &#125;</span><br><span class="line">    Qtype&amp; <span class="keyword">operator</span>*(Qtype&amp; other) &#123;</span><br><span class="line">        Qtype* res = <span class="keyword">new</span> <span class="built_in">Qtype</span>(MUL);</span><br><span class="line">        res-&gt;left = <span class="keyword">this</span>;</span><br><span class="line">        res-&gt;right = &amp;other;</span><br><span class="line">        <span class="keyword">return</span> *res;</span><br><span class="line">    &#125;</span><br><span class="line">    Qtype&amp; <span class="keyword">operator</span>/(Qtype&amp; other) &#123;</span><br><span class="line">        Qtype* res = <span class="keyword">new</span> <span class="built_in">Qtype</span>(DIV);</span><br><span class="line">        res-&gt;left = <span class="keyword">this</span>;</span><br><span class="line">        res-&gt;right = &amp;other;</span><br><span class="line">        <span class="keyword">return</span> *res;</span><br><span class="line">    &#125;</span><br><span class="line">    Qtype&amp; <span class="keyword">operator</span>=(Qtype&amp; other) &#123;</span><br><span class="line">        val = other.val;</span><br><span class="line">        grad = other.grad;</span><br><span class="line">        oper = other.oper;</span><br><span class="line">        left = other.left;</span><br><span class="line">        right = other.right;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Qtype&amp; <span class="keyword">operator</span>^(Qtype&amp; other) &#123;</span><br><span class="line">        Qtype* res = <span class="keyword">new</span> <span class="built_in">Qtype</span>(POW);</span><br><span class="line">        res-&gt;left = <span class="keyword">this</span>;</span><br><span class="line">        res-&gt;right = &amp;other;</span><br><span class="line">        <span class="keyword">return</span> *res;</span><br><span class="line">    &#125;</span><br><span class="line">    Qtype&amp; <span class="keyword">operator</span>+=(Qtype&amp; other) &#123;</span><br><span class="line">        Qtype* copy = <span class="keyword">new</span> <span class="built_in">Qtype</span>(*<span class="keyword">this</span>);<span class="comment">//将自身拷贝一份</span></span><br><span class="line">        <span class="keyword">this</span>-&gt;oper = ADD;</span><br><span class="line">        <span class="keyword">this</span>-&gt;left = copy;</span><br><span class="line">        <span class="keyword">this</span>-&gt;right = &amp;other;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//反向求导</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Process</span><span class="params">(<span class="type">float</span> grad)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (oper) &#123;</span><br><span class="line">        <span class="keyword">case</span> CONST:</span><br><span class="line">            grad = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">break</span>;<span class="comment">//不做任何事情</span></span><br><span class="line">        <span class="keyword">case</span> VAR:</span><br><span class="line">            <span class="keyword">this</span>-&gt;grad += grad;<span class="comment">//梯度增加</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> ADD:</span><br><span class="line">            left-&gt;<span class="built_in">Process</span>(grad);</span><br><span class="line">            right-&gt;<span class="built_in">Process</span>(grad);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> SUB:</span><br><span class="line">            left-&gt;<span class="built_in">Process</span>(grad);</span><br><span class="line">            right-&gt;<span class="built_in">Process</span>(-grad);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> MUL:</span><br><span class="line">            left-&gt;<span class="built_in">Process</span>(right-&gt;val * grad);</span><br><span class="line">            right-&gt;<span class="built_in">Process</span>(left-&gt;val * grad);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> DIV:</span><br><span class="line">            left-&gt;<span class="built_in">Process</span>(<span class="number">1</span> / right-&gt;val * grad);</span><br><span class="line">            right-&gt;<span class="built_in">Process</span>(-left-&gt;val / (right-&gt;val * right-&gt;val) * grad);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> POW:</span><br><span class="line">            left-&gt;<span class="built_in">Process</span>(right-&gt;val * <span class="built_in">pow</span>(left-&gt;val, right-&gt;val - <span class="number">1</span>) * grad);</span><br><span class="line">            right-&gt;<span class="built_in">Process</span>(val * <span class="built_in">log</span>(left-&gt;val) * grad);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//前向传播  </span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Forward</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (oper) &#123;</span><br><span class="line">        <span class="keyword">case</span> CONST:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> VAR:</span><br><span class="line">            grad = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> ADD:</span><br><span class="line">            left-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            right-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            val = left-&gt;val + right-&gt;val;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> SUB:</span><br><span class="line">            left-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            right-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            val = left-&gt;val - right-&gt;val;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> MUL:</span><br><span class="line">            left-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            right-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            val = left-&gt;val * right-&gt;val;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> DIV:</span><br><span class="line">            left-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            right-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            val = left-&gt;val / right-&gt;val;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> POW:</span><br><span class="line">            left-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            right-&gt;<span class="built_in">Forward</span>();</span><br><span class="line">            val = <span class="built_in">pow</span>(left-&gt;val, right-&gt;val);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Backward</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="built_in">Process</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//打印语法树</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">PrintTree</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (oper) &#123;</span><br><span class="line">        <span class="keyword">case</span> CONST:</span><br><span class="line">            cout &lt;&lt; val;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> VAR:</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;x&quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> ADD:</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;(&quot;</span>;</span><br><span class="line">            left-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;+&quot;</span>;</span><br><span class="line">            right-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;)&quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> SUB:</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;(&quot;</span>;</span><br><span class="line">            left-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;-&quot;</span>;</span><br><span class="line">            right-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;)&quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> MUL:</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;(&quot;</span>;</span><br><span class="line">            left-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;*&quot;</span>;</span><br><span class="line">            right-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;)&quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> DIV:</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;(&quot;</span>;</span><br><span class="line">            left-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;/&quot;</span>;</span><br><span class="line">            right-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;)&quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> POW:</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;(&quot;</span>;</span><br><span class="line">            left-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;^&quot;</span>;</span><br><span class="line">            right-&gt;<span class="built_in">PrintTree</span>();</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;)&quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>代码的复杂度与前向求导实际上差不多<br>同样是通过重载运算符来实现自动构造语法二叉树        </p>
+<p>测试代码如下        </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">Qtype <span class="title">a</span><span class="params">(<span class="number">0</span>, VAR)</span>, <span class="title">b</span><span class="params">(<span class="number">0</span>, VAR)</span>,<span class="title">k</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line">    Qtype Y = (a + b) * (b + k);</span><br><span class="line">    Y.<span class="built_in">Forward</span>();<span class="comment">//先前向传播一次计算各个节点的值，再反向传播计算梯度</span></span><br><span class="line">    Y.<span class="built_in">Backward</span>();</span><br><span class="line">    Y.<span class="built_in">PrintTree</span>();<span class="comment">//打印语法树</span></span><br><span class="line">    cout &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; a.grad &lt;&lt; endl;<span class="comment">//打印a的梯度</span></span><br><span class="line">    cout &lt;&lt; b.grad &lt;&lt; endl;<span class="comment">//打印b的梯度</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">((x+x)*(x+1))</span><br><span class="line">1</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/1970/01/01/%E7%AE%97%E6%B3%95/%E5%8F%8D%E5%90%91%E6%B1%82%E5%AF%BC%E7%AE%97%E6%B3%95/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;%E7%AE%97%E6%B3%95&#x2F;%E5%8F%8D%E5%90%91%E6%B1%82%E5%AF%BC%E7%AE%97%E6%B3%95&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;%E7%AE%97%E6%B3%95&#x2F;%E5%8F%8D%E5%90%91%E6%B1%82%E5%AF%BC%E7%AE%97%E6%B3%95&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339082"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>chisel3书写细节 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="有关chisel3的一些书写细节以及chisel生成verilog代码的一些注意事项">
+<meta property="og:type" content="article">
+<meta property="og:title" content="chisel3书写细节">
+<meta property="og:url" content="https://tastynoob.github.io/1970/01/01/chisel/chisel3%E4%B9%A6%E5%86%99%E7%BB%86%E8%8A%82/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="有关chisel3的一些书写细节以及chisel生成verilog代码的一些注意事项">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.124Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="chisel">
+<meta name="twitter:card" content="summary">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339249">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339249">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339249">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339249"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="/images/lsp/6.jpg" alt="chisel3书写细节" loading="lazy">
+            <h1>chisel3书写细节</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">1970年01月01日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>有关chisel3的一些书写细节<br>以及chisel生成verilog代码的一些注意事项</p>
+<span id="more"></span>
+
+<h3 id="首先有必要说的是模块参数化"><a href="#首先有必要说的是模块参数化" class="headerlink" title="首先有必要说的是模块参数化"></a>首先有必要说的是模块参数化</h3><p>可以这样写      </p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">dataT</span> <span class="keyword">extends</span> <span class="title">Bundle</span> </span>&#123;</span><br><span class="line">  <span class="keyword">val</span> data = <span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>)</span><br><span class="line">  <span class="keyword">val</span> valid = <span class="type">Bool</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span>[<span class="type">T</span>&lt;:<span class="type">Data</span>](<span class="params">eleT:<span class="type">T</span></span>) <span class="keyword">extends</span> <span class="title">Module</span> </span>&#123;</span><br><span class="line">    <span class="keyword">val</span> io = <span class="type">IO</span>(<span class="keyword">new</span> <span class="type">Bundle</span> &#123;</span><br><span class="line">        <span class="keyword">val</span> in = <span class="type">Input</span>(<span class="type">Vec</span>(<span class="number">2</span>, eleT))</span><br><span class="line">        <span class="keyword">val</span> out = <span class="type">Output</span>(<span class="type">Vec</span>(<span class="number">2</span>, eleT))</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">val</span> reg0 = <span class="type">Reg</span>(eleT)</span><br><span class="line">    <span class="keyword">val</span> reg1 = <span class="type">Reg</span>(eleT)</span><br><span class="line">    reg0 := io.in(<span class="number">0</span>)</span><br><span class="line">    reg1 := io.in(<span class="number">1</span>)</span><br><span class="line">    io.out(<span class="number">0</span>) := reg0</span><br><span class="line">    io.out(<span class="number">1</span>) := reg1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Main</span> <span class="keyword">extends</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    (<span class="keyword">new</span> chisel3.stage.<span class="type">ChiselStage</span>).emitVerilog(<span class="keyword">new</span> <span class="type">Test</span>(<span class="keyword">new</span> dataT))</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>有助于对模块内硬件类型的参数化,比如在fifo中</p>
+<h3 id="然后是chisel3的赋值语句"><a href="#然后是chisel3的赋值语句" class="headerlink" title="然后是chisel3的赋值语句"></a>然后是chisel3的赋值语句</h3><p>比如下面的语句  </p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">Module</span></span>&#123;</span><br><span class="line">    <span class="keyword">val</span> io = <span class="type">IO</span>(<span class="keyword">new</span> <span class="type">Bundle</span>&#123;</span><br><span class="line">        <span class="keyword">val</span> in = <span class="type">Input</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">        <span class="keyword">val</span> out = <span class="type">Output</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">val</span> reg = <span class="type">Reg</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">    reg:= io.in</span><br><span class="line">    io.out := reg</span><br><span class="line">    io.out := io.in</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当对线网类型进行多次赋值时,由于scala本质上是顺序执行的编程语言<br>所以后面的语句对线网类型的连接会将前面的赋值的连接覆盖掉<br>最后生成的verilog代码如下</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Test(</span><br><span class="line">  <span class="keyword">input</span>         clock,</span><br><span class="line">  <span class="keyword">input</span>         reset,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] io_in,</span><br><span class="line">  <span class="keyword">output</span> [<span class="number">31</span>:<span class="number">0</span>] io_out</span><br><span class="line">);</span><br><span class="line">  <span class="keyword">assign</span> io_out = io_in; <span class="comment">// @[Main.scala 14:12]</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<h4 id="但是当对寄存器类型做多次赋值时"><a href="#但是当对寄存器类型做多次赋值时" class="headerlink" title="但是当对寄存器类型做多次赋值时"></a>但是当对寄存器类型做多次赋值时</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">Module</span></span>&#123;</span><br><span class="line">    <span class="keyword">val</span> io = <span class="type">IO</span>(<span class="keyword">new</span> <span class="type">Bundle</span>&#123;</span><br><span class="line">        <span class="keyword">val</span> in0 = <span class="type">Input</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">        <span class="keyword">val</span> in1 = <span class="type">Input</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">        <span class="keyword">val</span> out = <span class="type">Output</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">val</span> reg = <span class="type">Reg</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">    reg := io.in0</span><br><span class="line">    reg := io.in1</span><br><span class="line">    io.out := reg</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成的verilog代码</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Test(</span><br><span class="line">  <span class="keyword">input</span>         clock,</span><br><span class="line">  <span class="keyword">input</span>         reset,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] io_in0,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] io_in1,</span><br><span class="line">  <span class="keyword">output</span> [<span class="number">31</span>:<span class="number">0</span>] io_out</span><br><span class="line">);</span><br><span class="line">  <span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] reg_; <span class="comment">// @[Main.scala 12:18]</span></span><br><span class="line">  <span class="keyword">assign</span> io_out = reg_; <span class="comment">// @[Main.scala 15:12]</span></span><br><span class="line">  <span class="keyword">always</span> @(<span class="keyword">posedge</span> clock) <span class="keyword">begin</span></span><br><span class="line">    reg_ &lt;= io_in1; <span class="comment">// @[Main.scala 14:9]</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<p>初步生成的结果和对线网类型的多次赋值的结果是一样的  </p>
+<h4 id="但是当我们加上条件判断"><a href="#但是当我们加上条件判断" class="headerlink" title="但是当我们加上条件判断"></a>但是当我们加上条件判断</h4><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">Module</span></span>&#123;</span><br><span class="line">    <span class="keyword">val</span> io = <span class="type">IO</span>(<span class="keyword">new</span> <span class="type">Bundle</span>&#123;</span><br><span class="line">        <span class="keyword">val</span> in0 = <span class="type">Input</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">        <span class="keyword">val</span> in1 = <span class="type">Input</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">        <span class="keyword">val</span> en0 = <span class="type">Input</span>(<span class="type">Bool</span>())</span><br><span class="line">        <span class="keyword">val</span> en1 = <span class="type">Input</span>(<span class="type">Bool</span>())</span><br><span class="line">        <span class="keyword">val</span> out = <span class="type">Output</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">val</span> reg = <span class="type">Reg</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line"></span><br><span class="line">    when(io.en0)&#123;</span><br><span class="line">        reg := io.in0</span><br><span class="line">    &#125;</span><br><span class="line">    reg := io.in1</span><br><span class="line">    io.out := reg</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成的verilog代码</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Test(</span><br><span class="line">  <span class="keyword">input</span>         clock,</span><br><span class="line">  <span class="keyword">input</span>         reset,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] io_in0,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] io_in1,</span><br><span class="line">  <span class="keyword">input</span>         io_en0,</span><br><span class="line">  <span class="keyword">input</span>         io_en1,</span><br><span class="line">  <span class="keyword">output</span> [<span class="number">31</span>:<span class="number">0</span>] io_out</span><br><span class="line">);</span><br><span class="line">  <span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] reg_; <span class="comment">// @[Main.scala 14:18]</span></span><br><span class="line">  <span class="keyword">assign</span> io_out = reg_; <span class="comment">// @[Main.scala 20:12]</span></span><br><span class="line">  <span class="keyword">always</span> @(<span class="keyword">posedge</span> clock) <span class="keyword">begin</span></span><br><span class="line">    reg_ &lt;= io_in1; <span class="comment">// @[Main.scala 19:9]</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+<p>很明显，这不是我们想要的verilog逻辑<br>假如我们调换一下赋值顺序呢</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span> <span class="keyword">extends</span> <span class="title">Module</span></span>&#123;</span><br><span class="line">    <span class="keyword">val</span> io = <span class="type">IO</span>(<span class="keyword">new</span> <span class="type">Bundle</span>&#123;</span><br><span class="line">        <span class="keyword">val</span> in0 = <span class="type">Input</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">        <span class="keyword">val</span> in1 = <span class="type">Input</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">        <span class="keyword">val</span> en0 = <span class="type">Input</span>(<span class="type">Bool</span>())</span><br><span class="line">        <span class="keyword">val</span> en1 = <span class="type">Input</span>(<span class="type">Bool</span>())</span><br><span class="line">        <span class="keyword">val</span> out = <span class="type">Output</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">val</span> reg = <span class="type">Reg</span>(<span class="type">UInt</span>(<span class="number">32.</span><span class="type">W</span>))</span><br><span class="line"></span><br><span class="line">    reg := io.in1</span><br><span class="line">    when(io.en0)&#123;</span><br><span class="line">        reg := io.in0</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    io.out := reg</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> Test(</span><br><span class="line">  <span class="keyword">input</span>         clock,</span><br><span class="line">  <span class="keyword">input</span>         reset,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] io_in0,</span><br><span class="line">  <span class="keyword">input</span>  [<span class="number">31</span>:<span class="number">0</span>] io_in1,</span><br><span class="line">  <span class="keyword">input</span>         io_en0,</span><br><span class="line">  <span class="keyword">input</span>         io_en1,</span><br><span class="line">  <span class="keyword">output</span> [<span class="number">31</span>:<span class="number">0</span>] io_out</span><br><span class="line">);</span><br><span class="line">  <span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] reg_; <span class="comment">// @[Main.scala 14:18]</span></span><br><span class="line">  <span class="keyword">assign</span> io_out = reg_; <span class="comment">// @[Main.scala 21:12]</span></span><br><span class="line">  <span class="keyword">always</span> @(<span class="keyword">posedge</span> clock) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span> (io_en0) <span class="keyword">begin</span> <span class="comment">// @[Main.scala 17:17]</span></span><br><span class="line">      reg_ &lt;= io_in0; <span class="comment">// @[Main.scala 18:13]</span></span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">      reg_ &lt;= io_in1; <span class="comment">// @[Main.scala 16:9]</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure>
+
+<p>发现逻辑又对了</p>
+<p>这是因为chisel对寄存器进行连接时,会按照从上往下的顺序进行连接<br>后连接的拥有最大的优先级<br>假如chisel中出现了对寄存器的多次连接<br>生成的verilog代码中会按照chisel从后往前的优先级进行连接<br>因此在写chisel代码时需要对同一寄存器进行多次赋值连接又不想写太多when语句<br>就可以用这个方法来解决这个问题</p>
+<h3 id="最后就是chisel代码仿真问题"><a href="#最后就是chisel代码仿真问题" class="headerlink" title="最后就是chisel代码仿真问题"></a>最后就是chisel代码仿真问题</h3><p>这里使用最新的chiseltest</p>
+<p>典型的测试代码如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Test extends Module&#123;</span><br><span class="line">    val io = IO(new Bundle&#123;</span><br><span class="line">        val in = Input(UInt(32.W))</span><br><span class="line">        val out = Output(UInt(32.W))</span><br><span class="line">    &#125;)</span><br><span class="line">    val reg = Wire(UInt(32.W))</span><br><span class="line">    reg := io.in</span><br><span class="line">    io.out := reg</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Test_Test extends AnyFlatSpec with ChiselScalatestTester &#123;</span><br><span class="line">    behavior of &quot;Module&quot;</span><br><span class="line">    it should &quot;work&quot; in &#123;</span><br><span class="line">        //添加如下语句可以生成仿真波形图到本地,可以用gtkwave打开</span><br><span class="line">        test(new Test).withAnnotations(Seq(WriteVcdAnnotation)) &#123; dut =&gt;</span><br><span class="line">            dut.io.in.poke(12.U)</span><br><span class="line">            dut.clock.step(1)</span><br><span class="line">            dut.io.out.expect(12.U)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意一下,使用chiseltest无法读取内部寄存器或线网的值,只能读取io接口的值<br>因此推荐添加如上代码生成波形图方便测试  </p>
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/1970/01/01/chisel/chisel3%E4%B9%A6%E5%86%99%E7%BB%86%E8%8A%82/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;chisel&#x2F;chisel3%E4%B9%A6%E5%86%99%E7%BB%86%E8%8A%82&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;chisel&#x2F;chisel3%E4%B9%A6%E5%86%99%E7%BB%86%E8%8A%82&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/chisel/" rel="tag">chisel</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339080"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E6%9C%89%E5%BF%85%E8%A6%81%E8%AF%B4%E7%9A%84%E6%98%AF%E6%A8%A1%E5%9D%97%E5%8F%82%E6%95%B0%E5%8C%96"><span class="toc-number">1.</span> <span class="toc-text">首先有必要说的是模块参数化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%84%B6%E5%90%8E%E6%98%AFchisel3%E7%9A%84%E8%B5%8B%E5%80%BC%E8%AF%AD%E5%8F%A5"><span class="toc-number">2.</span> <span class="toc-text">然后是chisel3的赋值语句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%86%E6%98%AF%E5%BD%93%E5%AF%B9%E5%AF%84%E5%AD%98%E5%99%A8%E7%B1%BB%E5%9E%8B%E5%81%9A%E5%A4%9A%E6%AC%A1%E8%B5%8B%E5%80%BC%E6%97%B6"><span class="toc-number">2.1.</span> <span class="toc-text">但是当对寄存器类型做多次赋值时</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%86%E6%98%AF%E5%BD%93%E6%88%91%E4%BB%AC%E5%8A%A0%E4%B8%8A%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD"><span class="toc-number">2.2.</span> <span class="toc-text">但是当我们加上条件判断</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E5%B0%B1%E6%98%AFchisel%E4%BB%A3%E7%A0%81%E4%BB%BF%E7%9C%9F%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">最后就是chisel代码仿真问题</span></a></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

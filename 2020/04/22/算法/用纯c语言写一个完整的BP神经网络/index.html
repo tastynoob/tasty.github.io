@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>用纯c语言写一个完整的BP神经网络 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="用纯c语言写一个完整的BP神经网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用纯c语言写一个完整的BP神经网络">
+<meta property="og:url" content="https://tastynoob.github.io/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="用纯c语言写一个完整的BP神经网络">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-22T10:13:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.174Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339154">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339154">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339154">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339155"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="/images/lsp/0.jpg" alt="用纯c语言写一个完整的BP神经网络" loading="lazy">
+            <h1>用纯c语言写一个完整的BP神经网络</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2020年04月22日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="nexmoefont icon-appstore-fill -link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>用纯c语言写一个完整的BP神经网络</p>
+<span id="more"></span>
+
+<p>话不多说,直接上代码</p>
+<p>所有的说明均在代码中</p>
+<p>首先是头文件BPNetWork.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> BPNETWORK_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BPNETWORK_H</span></span><br><span class="line"><span class="comment">//所需头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> f(x) Sigmoid(x)<span class="comment">//激活函数设定</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> f_(x) Sigmoidf(x)<span class="comment">//导函数</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">double</span>* ws;<span class="comment">//权重矩阵</span></span><br><span class="line">    <span class="type">double</span>* bs;<span class="comment">//偏置数组</span></span><br><span class="line">    <span class="type">double</span>* os;<span class="comment">//输出数组</span></span><br><span class="line">    <span class="type">double</span>* ss;<span class="comment">//误差(总误差关于加权和的偏导)</span></span><br><span class="line">&#125; Layer;</span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> lns;<span class="comment">//层数</span></span><br><span class="line">    <span class="type">int</span>* ns;<span class="comment">//每层神经元的数量</span></span><br><span class="line">    <span class="type">double</span>* is;<span class="comment">//神经网络输入</span></span><br><span class="line">    <span class="type">double</span>* ts;<span class="comment">//理想输出</span></span><br><span class="line">    Layer* las;<span class="comment">//神经网络各个层(不包括输入层)</span></span><br><span class="line">    <span class="type">double</span> ln;<span class="comment">//学习率</span></span><br><span class="line">&#125;BPNetWork;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//创建神经网络</span></span><br><span class="line">BPNetWork* <span class="title function_">BPCreate</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> len,<span class="type">double</span> ln)</span>;</span><br><span class="line"><span class="comment">//运行一次神经网络</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">RunOnce</span><span class="params">(BPNetWork* network)</span>;</span><br><span class="line"><span class="comment">//载入训练集</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">LoadIn</span><span class="params">(BPNetWork* network, <span class="type">double</span>* input, <span class="type">double</span>* putout)</span>;</span><br><span class="line"><span class="comment">//反向传播一次(训练一次)</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">TrainOnce</span><span class="params">(BPNetWork* network)</span>;</span><br><span class="line"><span class="comment">//输出总误差</span></span><br><span class="line"><span class="type">double</span> <span class="title function_">ETotal</span><span class="params">(BPNetWork* network)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//sigmoid激活函数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Sigmoid(x)  (1 / (1 + exp(-(x))))</span></span><br><span class="line"><span class="comment">//sigmoid激活函数的导函数,输入为sigmoid输出</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Sigmoidf(f)  ((f) * (1 - (f)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Tanh(x) ((2 / (1 + exp(-2 * (x))))-1)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> Tanhf(f) ((1+(f))*(1-(f)))</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<p>然后是程序本体BPNetWork.c</p>
+<p>宏定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;BPNetWork.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//神经网络的层数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LS network-&gt;lns</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输入层神经元的数量</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INNS network-&gt;ns[0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输入层的第a个输入</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INS(a) network-&gt;is[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第a个理想输出</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> TAS(a) network-&gt;ts[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输出层神经元的数量</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> OUTNS network-&gt;ns[LS-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层神经元的数量</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NS(n) network-&gt;ns[n-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层第a个神经元的第p个权重</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WF(n,a,p) network-&gt;las[n-2].ws[(p-1)+(a-1)*NS(n-1)]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层的第a个神经元的偏置</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BF(n,a) network-&gt;las[n-2].bs[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层第a个神经元的输出</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> OF(n,a) network-&gt;las[n-2].os[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第n层第a个神经元的误差</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> SF(n,a) network-&gt;las[n-2].ss[a-1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//学习率</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LN network-&gt;ln</span></span><br></pre></td></tr></table></figure>
+
+<p>BPCreate函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">BPNetWork* <span class="title function_">BPCreate</span><span class="params">(<span class="type">int</span>* nums, <span class="type">int</span> len,<span class="type">double</span> ln)</span></span><br><span class="line">&#123;</span><br><span class="line">    BPNetWork* network = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(BPNetWork));</span><br><span class="line">    network-&gt;lns = len;</span><br><span class="line">    network-&gt;ns = <span class="built_in">malloc</span>(len * <span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">    network-&gt;ln = ln;</span><br><span class="line">    <span class="built_in">memcpy</span>(network-&gt;ns, nums, len * <span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    network-&gt;is = <span class="built_in">malloc</span>(nums[<span class="number">0</span>] * <span class="keyword">sizeof</span>(<span class="type">double</span>));</span><br><span class="line">    network-&gt;las = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Layer) * (len - <span class="number">1</span>));</span><br><span class="line">    network-&gt;ts = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">double</span>) * nums[len - <span class="number">1</span>]);</span><br><span class="line">    srand(&amp;network);<span class="comment">//用networkd的内存地址做为随机数种子</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> p = <span class="number">0</span>; p &lt; len - <span class="number">1</span>; p++) &#123;</span><br><span class="line">        <span class="type">int</span> lastnum = nums[p];<span class="comment">//上一层的神经元数量</span></span><br><span class="line">        <span class="type">int</span> num = nums[p + <span class="number">1</span>];<span class="comment">//当前层的神经元数量</span></span><br><span class="line">        network-&gt;las[p].bs = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">double</span>) * num);</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        network-&gt;las[p].ws = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">double</span>) * num * lastnum);</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        network-&gt;las[p].os = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">double</span>) * num);</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        network-&gt;las[p].ss = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">double</span>) * num);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> pp = <span class="number">0</span>; pp &lt; num; pp++) &#123;</span><br><span class="line">            <span class="comment">//这里rand()/2.0的意思是把整数除整数转换为浮点数除整数</span></span><br><span class="line">            <span class="comment">//如果是整数除整数,输出则为带余的商</span></span><br><span class="line">            network-&gt;las[p].bs[pp] = rand() / <span class="number">2.0</span> / RAND_MAX;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> ppp = <span class="number">0</span>; ppp &lt; lastnum; ppp++) &#123;</span><br><span class="line">                network-&gt;las[p].ws[ppp + pp * lastnum] = rand() / <span class="number">2.0</span> / RAND_MAX;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> network;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>RunOnce函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">RunOnce</span><span class="params">(BPNetWork* network)</span> &#123;</span><br><span class="line">    <span class="comment">//计算输入层到第二层</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> a = <span class="number">1</span>; a &lt;= NS(<span class="number">2</span>); a++) &#123;</span><br><span class="line">        <span class="type">double</span> net = <span class="number">0</span>;</span><br><span class="line">        <span class="type">double</span>* o = &amp;OF(<span class="number">2</span>,a);<span class="comment">//获取第2层的输出值for (int aa = 1; aa &lt;= INNS; aa++) &#123;</span></span><br><span class="line">            net += INS(aa) * WF(<span class="number">2</span>, a, aa);<span class="comment">//INS(aa) * WF(2, a, aa);</span></span><br><span class="line">        &#125;</span><br><span class="line">        *o = f(net + BF(<span class="number">2</span>,a));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">2</span>; n &lt;= LS<span class="number">-1</span>; n++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> a = <span class="number">1</span>; a &lt;= NS(n + <span class="number">1</span>); a++) &#123;<span class="comment">//下一层的神经网络</span></span><br><span class="line">            <span class="type">double</span> net = <span class="number">0</span>;</span><br><span class="line">            <span class="type">double</span>* o = &amp;OF(n+<span class="number">1</span>,a);<span class="keyword">for</span> (<span class="type">int</span> aa = <span class="number">1</span>; aa &lt;= NS(n); aa++) &#123;<span class="comment">//当前层的神经网络</span></span><br><span class="line">                <span class="type">double</span> oo = OF(n, aa);</span><br><span class="line">                <span class="type">double</span>* ww = &amp;WF(n + <span class="number">1</span>, a, aa);</span><br><span class="line">                net += oo * (*ww);</span><br><span class="line">            &#125;</span><br><span class="line">            *o = f(net + BF(n + <span class="number">1</span>, a));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TrainOnce函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">TrainOnce</span><span class="params">(BPNetWork* network)</span> &#123;</span><br><span class="line">    <span class="comment">//计算输出层的误差函数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> a = <span class="number">1</span>; a &lt;= OUTNS; a++) &#123;</span><br><span class="line">        <span class="type">double</span>* s = &amp;SF(LS,a);<span class="comment">//获取第a个神经元的误差double* b = &amp;BF(LS, a);//获取第a个神经元的偏置</span></span><br><span class="line">        <span class="type">double</span> o = OF(LS, a);<span class="comment">//获取第a个神经元的输出</span></span><br><span class="line">        *s = (<span class="number">2.0</span> / OUTNS) * (o - TAS(a))* f_(o);</span><br><span class="line">        *b = *b - LN * (*s);<span class="comment">//更新偏置</span></span><br><span class="line">        <span class="comment">//更新权重</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> aa = <span class="number">1</span>; aa &lt;=NS(LS<span class="number">-1</span>) ; aa++) &#123;</span><br><span class="line">            <span class="type">double</span>* w = &amp;WF(LS, a, aa);</span><br><span class="line">            *w = *w - LN * (*s) * OF(LS<span class="number">-1</span>, aa);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//计算隐藏层的误差</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> a = LS<span class="number">-1</span>; a &gt; <span class="number">2</span>; a--) &#123;</span><br><span class="line">        <span class="comment">//开始计算第a层每个神经元的误差</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= NS(a); n++) &#123;<span class="comment">//当前层</span></span><br><span class="line">            <span class="type">double</span>* s = &amp;SF(a, n);<span class="comment">//获取第a个神经元的误差</span></span><br><span class="line">            *s = <span class="number">0</span>;</span><br><span class="line">            <span class="type">double</span>* b = &amp;BF(a, n);<span class="comment">//获取第a个神经元的偏置</span></span><br><span class="line">            <span class="type">double</span> o = OF(a, n);<span class="comment">//获取第a个神经元的输出</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> nn = <span class="number">1</span>; nn &lt;= NS(a+<span class="number">1</span>); nn++) &#123;<span class="comment">//下一层</span></span><br><span class="line">                <span class="type">double</span> lw = WF(a + <span class="number">1</span>, nn, n);<span class="comment">//获取下一层到当前神经元的偏置</span></span><br><span class="line">                <span class="type">double</span> ls = SF(a + <span class="number">1</span>, nn);<span class="comment">//获取下一层第nn个神经元的误差</span></span><br><span class="line">                *s += ls * lw * f_(o);</span><br><span class="line">            &#125;</span><br><span class="line">            *b = *b - LN * (*s);<span class="comment">//更新偏置</span></span><br><span class="line">            <span class="comment">//更新权重</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> nn = <span class="number">1</span>; nn &lt;= NS(a - <span class="number">1</span>); nn++) &#123;<span class="comment">//上一层</span></span><br><span class="line">                <span class="type">double</span>* w = &amp;WF(a, n, nn);</span><br><span class="line">                *w = *w - LN * (*s) *OF(a - <span class="number">1</span>, nn);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//计算第2层的误差函数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">1</span>; n &lt;= NS(<span class="number">2</span>); n++) &#123;<span class="comment">//当前层</span></span><br><span class="line">        <span class="type">double</span>* s = &amp;SF(<span class="number">2</span>, n);<span class="comment">//获取第a个神经元的误差</span></span><br><span class="line">        *s = <span class="number">0</span>;</span><br><span class="line">        <span class="type">double</span>* b = &amp;BF(<span class="number">2</span>, n);<span class="comment">//获取第a个神经元的偏置</span></span><br><span class="line">        <span class="type">double</span> o = OF(<span class="number">2</span>, n);<span class="comment">//获取第a个神经元的输出</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> nn = <span class="number">1</span>; nn &lt;= NS(<span class="number">3</span>); nn++) &#123;<span class="comment">//下一层</span></span><br><span class="line">            <span class="type">double</span> lw = WF(<span class="number">3</span>, nn, n);<span class="comment">//获取下一层到当前神经元的偏置</span></span><br><span class="line">            <span class="type">double</span> ls = SF(<span class="number">3</span>, nn);<span class="comment">//获取下一层第nn个神经元的误差</span></span><br><span class="line">            *s += ls * lw * f_(o);</span><br><span class="line">        &#125;</span><br><span class="line">        *b = *b - LN * (*s);<span class="comment">//更新偏置</span></span><br><span class="line">        <span class="comment">//更新权重</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> nn = <span class="number">1</span>; nn &lt;= INNS; nn++) &#123;<span class="comment">//上一层</span></span><br><span class="line">            <span class="type">double</span>* w = &amp;WF(<span class="number">2</span>, n, nn);</span><br><span class="line">            *w = *w - LN * (*s) * INS(nn);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>LoadIn函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">LoadIn</span><span class="params">(BPNetWork* network,<span class="type">double</span>* input,<span class="type">double</span>* putout)</span> &#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(network-&gt;is, input, INNS*<span class="keyword">sizeof</span>(<span class="type">double</span>));</span><br><span class="line">    <span class="built_in">memcpy</span>(network-&gt;ts, putout, OUTNS*<span class="keyword">sizeof</span>(<span class="type">double</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ETotal函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">ETotal</span><span class="params">(BPNetWork* network)</span> &#123;</span><br><span class="line">    <span class="type">double</span> val = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> a = <span class="number">1</span>; a &lt;= OUTNS; a++) &#123;</span><br><span class="line">        val += ((OF(LS, a) - TAS(a)) * (OF(LS, a) - TAS(a))) / OUTNS;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>入口函数:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> a[] = &#123; <span class="number">1</span>,<span class="number">20</span>,<span class="number">20</span>,<span class="number">1</span> &#125;;<span class="comment">//4层神经元,数量分别为1,20,20,1</span></span><br><span class="line">    <span class="type">double</span> in[<span class="number">1</span>] = &#123; <span class="number">0.9</span> &#125;;<span class="comment">//训练样本输入1</span></span><br><span class="line">    <span class="type">double</span> in1[<span class="number">1</span>] = &#123; <span class="number">0.1</span> &#125;;<span class="comment">//训练样本输入2</span></span><br><span class="line">    <span class="type">double</span> in2[<span class="number">1</span>] = &#123; <span class="number">0.5</span> &#125;;<span class="comment">//训练样本输入3</span></span><br><span class="line">    <span class="type">double</span> out[<span class="number">1</span>] = &#123; <span class="number">0.1</span> &#125;;<span class="comment">//理想输出</span></span><br><span class="line">    <span class="comment">//神经网络训练目标:</span></span><br><span class="line">    <span class="comment">//输入任意值,输出0.1</span></span><br><span class="line">    BPNetWork* network = BPCreate(a, <span class="number">4</span>, <span class="number">0.5</span>);</span><br><span class="line">    <span class="type">int</span> c = <span class="number">1000</span>;<span class="comment">//训练1000次</span></span><br><span class="line">    <span class="keyword">while</span> (c--) &#123;</span><br><span class="line">        LoadIn(network, in, out);</span><br><span class="line">        RunOnce(network);</span><br><span class="line">        TrainOnce(network);</span><br><span class="line">        LoadIn(network, in1, out);</span><br><span class="line">        RunOnce(network);</span><br><span class="line">        TrainOnce(network);</span><br><span class="line">        LoadIn(network, in2, out);</span><br><span class="line">        RunOnce(network);</span><br><span class="line">        TrainOnce(network);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//训练完后来一波测试</span></span><br><span class="line">    <span class="type">double</span> t[<span class="number">1</span>] = &#123; <span class="number">0.7</span> &#125;;<span class="comment">//输入</span></span><br><span class="line">    <span class="type">double</span> o[<span class="number">1</span>] = &#123; <span class="number">0.2</span> &#125;;<span class="comment">//凑数</span></span><br><span class="line">    LoadIn(network, t, o);</span><br><span class="line">    RunOnce(network);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;OK\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%g\n&quot;</span>, ETotal(network));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%g&quot;</span>, OF(<span class="number">4</span>, <span class="number">1</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>训练目标:</p>
+<p>输入任意数,输出总为0.1</p>
+<p>经过1000次训练后的输出:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">OK</span><br><span class="line">0.0101097//最终误差</span><br><span class="line">0.0994528//输入0.7,输出约为0.1</span><br></pre></td></tr></table></figure>
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;2020&#x2F;04&#x2F;22&#x2F;%E7%AE%97%E6%B3%95&#x2F;%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;2020&#x2F;04&#x2F;22&#x2F;%E7%AE%97%E6%B3%95&#x2F;%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339061"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

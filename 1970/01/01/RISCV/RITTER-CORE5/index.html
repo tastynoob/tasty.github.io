@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>FPGA-RISCV内核入门5 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="译码段设计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FPGA-RISCV内核入门5">
+<meta property="og:url" content="https://tastynoob.github.io/1970/01/01/RISCV/RITTER-CORE5/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="译码段设计">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="1970-01-01T00:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-28T16:56:51.122Z">
+<meta property="article:author" content="tastynoob">
+<meta property="article:tag" content="riscv">
+<meta name="twitter:card" content="summary">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682737339243">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682737339243">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682737339243">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682737339243"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>57</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>6</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:nexmoe.com" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">29</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+          <li>
+            <a href="/1970/01/01/GD32V%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E6%85%A2%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">GD32V运行速度慢的解决方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover"> 
+            <img src="/images/BackGround.jpg" alt="FPGA-RISCV内核入门5" loading="lazy">
+            <h1>FPGA-RISCV内核入门5</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">1970年01月01日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/fpga/">fpga</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>译码段设计</p>
+<span id="more"></span>
+
+<p>译码段是纯组合逻辑</p>
+<p>这部分比较简单</p>
+<p>也就是将指令译码出详细信息</p>
+<p>这里直接贴上代码</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_wigth (17)</span></span><br><span class="line"><span class="comment">/*译码出的具体指令内容</span></span><br><span class="line"><span class="comment">1&#x27;是否要进行运算[0]</span></span><br><span class="line"><span class="comment">1&#x27;alu b位是否选择立即数[1]</span></span><br><span class="line"><span class="comment">1&#x27;alu pc是否参与计算[2]</span></span><br><span class="line"><span class="comment">1&#x27;是否是条件分支指令[3]</span></span><br><span class="line"><span class="comment">1&#x27;是否是强制跳转[4]</span></span><br><span class="line"><span class="comment">1‘是否要读内存[5]</span></span><br><span class="line"><span class="comment">1’是否要写内存[6]</span></span><br><span class="line"><span class="comment">1’是否要读写csr寄存器[8]</span></span><br><span class="line"><span class="comment">3’func[11:9]</span></span><br><span class="line"><span class="comment">7‘func7[18:12]</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_alu 0</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_b 1</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_pc 2</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_branch 3</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_jal 4</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_rdbus 5</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_wdbus 6</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_wcsr 7</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_func3 10:8</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> decinfo_func7 17:11</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//译码模块</span></span><br><span class="line"><span class="keyword">module</span> ID (</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_clk,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_rst_n,</span><br><span class="line"></span><br><span class="line">    <span class="comment">//解码出的具体指令</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>[`decinfo_wigth:<span class="number">0</span>] o_dec_data,</span><br><span class="line">    <span class="comment">//csr地址</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>[<span class="number">11</span>:<span class="number">0</span>] o_csr_addr,</span><br><span class="line"></span><br><span class="line">    <span class="comment">//rd寄存器写地址</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] o_rd_addr1,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] o_rd_addr2,</span><br><span class="line">    <span class="comment">//rs1读地址</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] o_rs1_addr,</span><br><span class="line"></span><br><span class="line">    <span class="comment">//rs2读地址</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] o_rs2_addr,</span><br><span class="line"></span><br><span class="line">    <span class="comment">//立即数</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] o_imm_data,</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//如果是opc_load指令，那么则暂停取指直到opc_load执行完毕</span></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">wire</span> o_opc_load,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*分割线*/</span></span><br><span class="line">    <span class="comment">//上级传递下来的指令地址</span></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] i_iaddr,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] i_idata</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 取出指令中的每一个域</span></span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">6</span>:<span class="number">0</span>] opc = i_idata[<span class="number">6</span>:<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">2</span>:<span class="number">0</span>] func = i_idata[<span class="number">14</span>:<span class="number">12</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">6</span>:<span class="number">0</span>] func7 = i_idata[<span class="number">31</span>:<span class="number">25</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] rd = i_idata[<span class="number">11</span>:<span class="number">7</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] rs1 = i_idata[<span class="number">19</span>:<span class="number">15</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] rs2 = i_idata[<span class="number">24</span>:<span class="number">20</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">11</span>:<span class="number">0</span>] type_i_imm_11_0 = i_idata[<span class="number">31</span>:<span class="number">20</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">6</span>:<span class="number">0</span>] type_s_imm_11_5 = i_idata[<span class="number">31</span>:<span class="number">25</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] type_s_imm_4_0 = i_idata[<span class="number">11</span>:<span class="number">7</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">6</span>:<span class="number">0</span>] type_b_imm_12_10_5 = i_idata[<span class="number">31</span>:<span class="number">25</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] type_b_imm_4_1_11 = i_idata[<span class="number">11</span>:<span class="number">7</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">19</span>:<span class="number">0</span>] type_u_imm_31_12 = i_idata[<span class="number">31</span>:<span class="number">12</span>];</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">19</span>:<span class="number">0</span>] type_j_imm_31_12 = i_idata[<span class="number">31</span>:<span class="number">12</span>];</span><br><span class="line"></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_lui         7&#x27;b0110111 </span><span class="comment">// rd = imm</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_auipc       7&#x27;b0010111 </span><span class="comment">// rd = pc + imm</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_jal         7&#x27;b1101111</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_jalr        7&#x27;b1100111</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_branch      7&#x27;b1100011</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_load        7&#x27;b0000011</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_store       7&#x27;b0100011</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_opimm       7&#x27;b0010011</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_op          7&#x27;b0110011</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_fence       7&#x27;b0001111</span></span><br><span class="line"><span class="meta">`<span class="keyword">define</span> opc_system      7&#x27;b1110011</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指令opc域的取值</span></span><br><span class="line">    <span class="keyword">wire</span> opc_lui = (opc == `opc_lui);</span><br><span class="line">    <span class="keyword">wire</span> opc_auipc = (opc == `opc_auipc);</span><br><span class="line">    <span class="keyword">wire</span> opc_jal = (opc == `opc_jal);</span><br><span class="line">    <span class="keyword">wire</span> opc_jalr = (opc == `opc_jalr);</span><br><span class="line">    <span class="keyword">wire</span> opc_branch = (opc == `opc_branch);</span><br><span class="line">    <span class="keyword">wire</span> opc_load = (opc == `opc_load);</span><br><span class="line">    <span class="keyword">wire</span> opc_store = (opc == `opc_store);</span><br><span class="line">    <span class="keyword">wire</span> opc_opimm = (opc == `opc_opimm);</span><br><span class="line">    <span class="keyword">wire</span> opc_op = (opc == `opc_op);</span><br><span class="line">    <span class="keyword">wire</span> opc_fence = (opc == `opc_fence);</span><br><span class="line">    <span class="keyword">wire</span> opc_system = (opc == `opc_system);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指令func域的取值</span></span><br><span class="line">    <span class="keyword">wire</span> func_000 = (func == <span class="number">3&#x27;b000</span>);</span><br><span class="line">    <span class="keyword">wire</span> func_001 = (func == <span class="number">3&#x27;b001</span>);</span><br><span class="line">    <span class="keyword">wire</span> func_010 = (func == <span class="number">3&#x27;b010</span>);</span><br><span class="line">    <span class="keyword">wire</span> func_011 = (func == <span class="number">3&#x27;b011</span>);</span><br><span class="line">    <span class="keyword">wire</span> func_100 = (func == <span class="number">3&#x27;b100</span>);</span><br><span class="line">    <span class="keyword">wire</span> func_101 = (func == <span class="number">3&#x27;b101</span>);</span><br><span class="line">    <span class="keyword">wire</span> func_110 = (func == <span class="number">3&#x27;b110</span>);</span><br><span class="line">    <span class="keyword">wire</span> func_111 = (func == <span class="number">3&#x27;b111</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指令func7域的取值</span></span><br><span class="line">    <span class="keyword">wire</span> func7_0000000 = (func7 == <span class="number">7&#x27;b0000000</span>);</span><br><span class="line">    <span class="keyword">wire</span> func7_0100000 = (func7 == <span class="number">7&#x27;b0100000</span>);</span><br><span class="line">    <span class="keyword">wire</span> func7_0000001 = (func7 == <span class="number">7&#x27;b0000001</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// I类型指令imm域的取值</span></span><br><span class="line">    <span class="keyword">wire</span> type_i_imm_000000000000 = (type_i_imm_11_0 == <span class="number">12&#x27;b000000000000</span>);</span><br><span class="line">    <span class="keyword">wire</span> type_i_imm_000000000001 = (type_i_imm_11_0 == <span class="number">12&#x27;b000000000001</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*********************************************************/</span></span><br><span class="line">    <span class="comment">// 译码出具体指令</span></span><br><span class="line">    <span class="comment">/*j*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_lui = opc_lui;</span><br><span class="line">    <span class="keyword">wire</span> inst_auipc = opc_auipc;</span><br><span class="line">    <span class="keyword">wire</span> inst_jal = opc_jal;</span><br><span class="line">    <span class="keyword">wire</span> inst_jalr = opc_jalr &amp; func_000;</span><br><span class="line">    <span class="comment">/*branch*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_beq = opc_branch &amp; func_000;</span><br><span class="line">    <span class="keyword">wire</span> inst_bne = opc_branch &amp; func_001;</span><br><span class="line">    <span class="keyword">wire</span> inst_blt = opc_branch &amp; func_100;</span><br><span class="line">    <span class="keyword">wire</span> inst_bge = opc_branch &amp; func_101;</span><br><span class="line">    <span class="keyword">wire</span> inst_bltu = opc_branch &amp; func_110;</span><br><span class="line">    <span class="keyword">wire</span> inst_bgeu = opc_branch &amp; func_111;</span><br><span class="line">    <span class="comment">/*load*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_lb = opc_load &amp; func_000;</span><br><span class="line">    <span class="keyword">wire</span> inst_lh = opc_load &amp; func_001;</span><br><span class="line">    <span class="keyword">wire</span> inst_lw = opc_load &amp; func_010;</span><br><span class="line">    <span class="keyword">wire</span> inst_lbu = opc_load &amp; func_100;</span><br><span class="line">    <span class="keyword">wire</span> inst_lhu = opc_load &amp; func_101;</span><br><span class="line">    <span class="comment">/*store*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_sb = opc_store &amp; func_000;</span><br><span class="line">    <span class="keyword">wire</span> inst_sh = opc_store &amp; func_001;</span><br><span class="line">    <span class="keyword">wire</span> inst_sw = opc_store &amp; func_010;</span><br><span class="line">    <span class="comment">/*opimm*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_addi = opc_opimm &amp; func_000;</span><br><span class="line">    <span class="keyword">wire</span> inst_slti = opc_opimm &amp; func_010;</span><br><span class="line">    <span class="keyword">wire</span> inst_sltiu = opc_opimm &amp; func_011;</span><br><span class="line">    <span class="keyword">wire</span> inst_xori = opc_opimm &amp; func_100;</span><br><span class="line">    <span class="keyword">wire</span> inst_ori = opc_opimm &amp; func_110;</span><br><span class="line">    <span class="keyword">wire</span> inst_andi = opc_opimm &amp; func_111;</span><br><span class="line">    <span class="keyword">wire</span> inst_slli = opc_opimm &amp; func_001 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_srli = opc_opimm &amp; func_101 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_srai = opc_opimm &amp; func_101 &amp; func7_0100000;</span><br><span class="line">    <span class="comment">/*op*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_add = opc_op &amp; func_000 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_sub = opc_op &amp; func_000 &amp; func7_0100000;</span><br><span class="line">    <span class="keyword">wire</span> inst_sll = opc_op &amp; func_001 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_slt = opc_op &amp; func_010 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_sltu = opc_op &amp; func_011 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_xor = opc_op &amp; func_100 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_srl = opc_op &amp; func_101 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_sra = opc_op &amp; func_101 &amp; func7_0100000;</span><br><span class="line">    <span class="keyword">wire</span> inst_or = opc_op &amp; func_110 &amp; func7_0000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_and = opc_op &amp; func_111 &amp; func7_0000000;</span><br><span class="line">    <span class="comment">/*fence*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_fence = opc_fence &amp; func_000;</span><br><span class="line">    <span class="keyword">wire</span> inst_fencei = opc_fence &amp; func_001;</span><br><span class="line">    <span class="comment">/*system*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_ecall = opc_system &amp; func_000 &amp; type_i_imm_000000000000;</span><br><span class="line">    <span class="keyword">wire</span> inst_ebreak = opc_system &amp; func_000 &amp; type_i_imm_000000000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_csrrw = opc_system &amp; func_001;</span><br><span class="line">    <span class="keyword">wire</span> inst_csrrs = opc_system &amp; func_010;</span><br><span class="line">    <span class="keyword">wire</span> inst_csrrc = opc_system &amp; func_011;</span><br><span class="line">    <span class="keyword">wire</span> inst_csrrwi = opc_system &amp; func_101;</span><br><span class="line">    <span class="keyword">wire</span> inst_csrrsi = opc_system &amp; func_110;</span><br><span class="line">    <span class="keyword">wire</span> inst_csrrci = opc_system &amp; func_111;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*M拓展*/</span></span><br><span class="line">    <span class="keyword">wire</span> inst_mul = opc_op &amp; func_000 &amp; func7_0000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_mulh = opc_op &amp; func_001 &amp; func7_0000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_mulhsu = opc_op &amp; func_010 &amp; func7_0000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_mulhu = opc_op &amp; func_011 &amp; func7_0000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_div = opc_op &amp; func_100 &amp; func7_0000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_divu = opc_op &amp; func_101 &amp; func7_0000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_rem = opc_op &amp; func_110 &amp; func7_0000001;</span><br><span class="line">    <span class="keyword">wire</span> inst_remu = opc_op &amp; func_111 &amp; func7_0000001;</span><br><span class="line"><span class="comment">/*********************************************************/</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指令中的立即数</span></span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] inst_u_type_imm = &#123;i_idata[<span class="number">31</span>:<span class="number">12</span>], <span class="number">12&#x27;b0</span>&#125;;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] inst_j_type_imm = &#123;&#123;<span class="number">12</span>&#123;i_idata[<span class="number">31</span>]&#125;&#125;, i_idata[<span class="number">19</span>:<span class="number">12</span>], i_idata[<span class="number">20</span>], i_idata[<span class="number">30</span>:<span class="number">21</span>], <span class="number">1&#x27;b0</span>&#125;;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] inst_b_type_imm = &#123;&#123;<span class="number">20</span>&#123;i_idata[<span class="number">31</span>]&#125;&#125;, i_idata[<span class="number">7</span>], i_idata[<span class="number">30</span>:<span class="number">25</span>], i_idata[<span class="number">11</span>:<span class="number">8</span>], <span class="number">1&#x27;b0</span>&#125;;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] inst_s_type_imm = &#123;&#123;<span class="number">20</span>&#123;i_idata[<span class="number">31</span>]&#125;&#125;, i_idata[<span class="number">31</span>:<span class="number">25</span>], i_idata[<span class="number">11</span>:<span class="number">7</span>]&#125;;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] i_idata_type_imm = &#123;&#123;<span class="number">20</span>&#123;i_idata[<span class="number">31</span>]&#125;&#125;, i_idata[<span class="number">31</span>:<span class="number">20</span>]&#125;;</span><br><span class="line">    <span class="comment">//csr zimm</span></span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] inst_csr_type_imm = &#123;<span class="number">27&#x27;h0</span>, i_idata[<span class="number">19</span>:<span class="number">15</span>]&#125;;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] inst_shift_type_imm = &#123;<span class="number">27&#x27;h0</span>, i_idata[<span class="number">24</span>:<span class="number">20</span>]&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//立即数选择</span></span><br><span class="line">    <span class="keyword">assign</span> o_imm_data = (opc_lui | opc_auipc) ? inst_u_type_imm :</span><br><span class="line">                        (opc_jal) ? inst_j_type_imm :</span><br><span class="line">                        (opc_jalr | opc_load) ? i_idata_type_imm :</span><br><span class="line">                        (opc_branch) ? inst_b_type_imm :</span><br><span class="line">                        (opc_store) ? inst_s_type_imm :</span><br><span class="line">                        (opc_opimm) ? </span><br><span class="line">                        ((inst_slli | inst_srli | inst_srai) ? inst_shift_type_imm : i_idata_type_imm) :</span><br><span class="line">                        (inst_ecall | inst_ebreak) ? i_idata_type_imm :<span class="comment">//这里把ecall和ebreak的后12位当作立即数处理</span></span><br><span class="line">                        <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//csr寄存器地址</span></span><br><span class="line">    <span class="keyword">assign</span> o_csr_addr = opc_system ? i_idata_type_imm : <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否需要写rd寄存器</span></span><br><span class="line">    <span class="keyword">wire</span> access_rd =    opc_lui     |</span><br><span class="line">                        opc_auipc   |</span><br><span class="line">                        opc_jal     |</span><br><span class="line">                        opc_jalr    |</span><br><span class="line">                        opc_opimm   |</span><br><span class="line">                        opc_op      |</span><br><span class="line">                        opc_system;</span><br><span class="line">    <span class="keyword">assign</span> o_rd_addr1 = access_rd ? rd: <span class="number">5&#x27;h0</span>;</span><br><span class="line">    <span class="keyword">assign</span> o_rd_addr2 = opc_load ? rd:<span class="number">5&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否需要访问rs1寄存器</span></span><br><span class="line">    <span class="keyword">wire</span> access_rs1 =   opc_jalr    |</span><br><span class="line">                        opc_branch  |</span><br><span class="line">                        opc_load    |</span><br><span class="line">                        opc_store   |</span><br><span class="line">                        opc_opimm   |</span><br><span class="line">                        opc_op      |</span><br><span class="line">                        inst_csrrw  |</span><br><span class="line">                        inst_csrrs  |</span><br><span class="line">                        inst_csrrc;</span><br><span class="line">    <span class="keyword">assign</span> o_rs1_addr = access_rs1 ? rs1: <span class="number">5&#x27;h0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否需要访问rs2寄存器</span></span><br><span class="line">    <span class="keyword">wire</span> access_rs2 = opc_branch    |</span><br><span class="line">                        opc_store   |</span><br><span class="line">                        opc_op;</span><br><span class="line">    <span class="keyword">assign</span> o_rs2_addr = access_rs2? rs2: <span class="number">5&#x27;h0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//是否需要进行数学计算</span></span><br><span class="line">    <span class="comment">//这个标志貌似可有可无</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_alu] = opc_lui | opc_auipc | opc_jal | opc_jalr | opc_branch | opc_load | opc_store | opc_opimm | opc_op;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//alu b位是否选择立即数</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_b] = opc_lui | opc_auipc | opc_jal | opc_jalr | opc_load | opc_store | opc_opimm;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//alu pc是否参与计算,是否是jal等跳转指令</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_pc] = opc_auipc | opc_jal ;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//是否是条件分支指令</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_branch] = opc_branch;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//是否需要强制跳转</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_jal] = opc_jal | opc_jalr;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//是否需要读内存</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_rdbus] = opc_load;</span><br><span class="line">    <span class="comment">//是否需要写内存</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_wdbus] = opc_store;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//是否要读写csr寄存器</span></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_wcsr] = opc_system &amp; (~(inst_ecall | inst_ebreak));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_func3] = (opc_lui | opc_auipc | opc_jal) ? <span class="number">0</span> : func;</span><br><span class="line">    <span class="keyword">assign</span> o_dec_data[`decinfo_func7] = (inst_slli | inst_srli | inst_srai | opc_op) ? func7 : <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">assign</span> o_opc_load = opc_load;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> ID_EX (</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_clk,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_rst_n,</span><br><span class="line">    <span class="comment">//流水线暂停</span></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_pipe_stop,</span><br><span class="line">    <span class="comment">//流水线冲刷</span></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_pipe_flush,</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**/</span></span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[`decinfo_wigth:<span class="number">0</span>] i_dec_data,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">11</span>:<span class="number">0</span>] i_csr_addr,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] i_rd_addr1,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] i_rd_addr2,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] i_rs1_addr,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] i_rs2_addr,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] i_imm_data,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span> i_opc_load,</span><br><span class="line">    <span class="keyword">input</span> <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] i_iaddr,</span><br><span class="line"></span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[`decinfo_wigth:<span class="number">0</span>] o_dec_data,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[<span class="number">11</span>:<span class="number">0</span>] o_csr_addr,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[<span class="number">4</span>:<span class="number">0</span>] o_rd_addr1,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[<span class="number">4</span>:<span class="number">0</span>] o_rd_addr2,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[<span class="number">4</span>:<span class="number">0</span>] o_rs1_addr,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[<span class="number">4</span>:<span class="number">0</span>] o_rs2_addr,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[<span class="number">31</span>:<span class="number">0</span>] o_imm_data,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span> o_opc_load,</span><br><span class="line">    <span class="keyword">output</span> <span class="keyword">reg</span>[<span class="number">31</span>:<span class="number">0</span>] o_iaddr</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">);</span><br><span class="line">    <span class="keyword">wire</span> en = (~i_pipe_stop) | i_pipe_flush;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">wire</span>[`decinfo_wigth:<span class="number">0</span>] dec_data= i_pipe_flush ? <span class="number">0</span> : i_dec_data;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">11</span>:<span class="number">0</span>] csr_addr= i_pipe_flush ? <span class="number">0</span> : i_csr_addr;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] rd_addr1= i_pipe_flush ? <span class="number">0</span> : i_rd_addr1;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] rd_addr2= i_pipe_flush ? <span class="number">0</span> : i_rd_addr2;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] rs1_addr= i_pipe_flush ? <span class="number">0</span> : i_rs1_addr;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">4</span>:<span class="number">0</span>] rs2_addr= i_pipe_flush ? <span class="number">0</span> : i_rs2_addr;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] imm_data= i_pipe_flush ? <span class="number">0</span> : i_imm_data;</span><br><span class="line">    <span class="keyword">wire</span> opc_load= i_pipe_flush ? <span class="number">0</span> : i_opc_load;</span><br><span class="line">    <span class="keyword">wire</span>[<span class="number">31</span>:<span class="number">0</span>] iaddr = i_pipe_flush ? <span class="number">0</span> : i_iaddr;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        o_dec_data &lt;=  <span class="number">0</span> ;</span><br><span class="line">        o_csr_addr &lt;=<span class="number">0</span>;</span><br><span class="line">        o_rd_addr1&lt;= <span class="number">0</span>;</span><br><span class="line">        o_rd_addr2&lt;= <span class="number">0</span>;</span><br><span class="line">        o_rs1_addr &lt;= <span class="number">0</span> ;</span><br><span class="line">        o_rs2_addr &lt;= <span class="number">0</span> ;</span><br><span class="line">        o_imm_data &lt;= <span class="number">0</span> ;</span><br><span class="line">        o_opc_load &lt;= <span class="number">0</span>;</span><br><span class="line">        o_iaddr &lt;= <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> @(<span class="keyword">posedge</span> i_clk <span class="keyword">or</span> <span class="keyword">negedge</span> i_rst_n) <span class="keyword">begin</span></span><br><span class="line">        <span class="keyword">if</span>(i_rst_n == `rst)<span class="keyword">begin</span></span><br><span class="line">            o_dec_data &lt;=  <span class="number">0</span> ;</span><br><span class="line">            o_csr_addr &lt;=<span class="number">0</span>;</span><br><span class="line">            o_rd_addr1 &lt;=  <span class="number">0</span> ;</span><br><span class="line">            o_rs1_addr &lt;=  <span class="number">0</span> ;</span><br><span class="line">            o_rs2_addr &lt;=  <span class="number">0</span> ;</span><br><span class="line">            o_imm_data &lt;= <span class="number">0</span> ;</span><br><span class="line">            o_opc_load &lt;= <span class="number">0</span>;</span><br><span class="line">            o_iaddr &lt;= <span class="number">0</span> ;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(en == `en)<span class="keyword">begin</span></span><br><span class="line">            o_dec_data &lt;= dec_data;</span><br><span class="line">            o_csr_addr &lt;= csr_addr;</span><br><span class="line">            o_rd_addr1 &lt;= rd_addr1;</span><br><span class="line">            o_rd_addr2 &lt;= rd_addr2;</span><br><span class="line">            o_rs1_addr &lt;= rs1_addr;</span><br><span class="line">            o_rs2_addr &lt;= rs2_addr;</span><br><span class="line">            o_imm_data &lt;= imm_data;</span><br><span class="line">            o_opc_load &lt;= opc_load;</span><br><span class="line">            o_iaddr &lt;= iaddr;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="keyword">endmodule</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>这里面没有什么特殊技术</p>
+<p>但之前也说了，制作这个riscv内核单纯是为了学习</p>
+<p>只要求能跑，不要求性能</p>
+<p>译码段主要译码出的就是</p>
+<p>1、读写寄存器地址（不读不写则设置为0）<br>2、执行段所需资源<br>3、是否读写csr寄存器<br>4、是否跳转<br>5、指令类型</p>
+<p>然后由译码段到执行段的连接段传递</p>
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/1970/01/01/RISCV/RITTER-CORE5/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;RISCV&#x2F;RITTER-CORE5&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;1970&#x2F;01&#x2F;01&#x2F;RISCV&#x2F;RITTER-CORE5&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+        <a class="nexmoefont icon-tag-fill -none-link" href="/tags/riscv/" rel="tag">riscv</a>
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682737339077"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
