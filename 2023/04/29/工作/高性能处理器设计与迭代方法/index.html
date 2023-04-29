@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    
+    <title>高性能处理器设计与快速迭代方法 - tastynoob&#39;s blog</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    
+    <link rel="shortcut icon" href="/icon.png" type="image/png" />
+    <meta name="description" content="主要讲一下现代高性能处理器设计与性能迭代方法简单综合一下几个月的实习学习结果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="高性能处理器设计与快速迭代方法">
+<meta property="og:url" content="https://tastynoob.github.io/2023/04/29/%E5%B7%A5%E4%BD%9C/%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="tastynoob&#39;s blog">
+<meta property="og:description" content="主要讲一下现代高性能处理器设计与性能迭代方法简单综合一下几个月的实习学习结果">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-04-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-04-29T08:18:18.048Z">
+<meta property="article:author" content="tastynoob">
+<meta name="twitter:card" content="summary">
+    
+<link rel="stylesheet" href="/lib/fancybox/fancybox.css">
+<link rel="stylesheet" href="/lib/mdui_043tiny/mdui.css">
+
+
+    <link rel="stylesheet" href="/lib/iconfont/iconfont.css?v=1682756347353">
+    
+    <link rel="stylesheet" href="/css/style.css?v=1682756347353">
+
+    
+        
+            <link rel="stylesheet" href="/custom.css?v=1682756347353">
+        
+    
+
+    
+<script src="/lib/mdui_043tiny/mdui.js" async></script>
+<script src="/lib/fancybox/fancybox.umd.js" async></script>
+
+
+    <script async src="/js/app.js?v=1682756347353"></script>
+    
+     
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4D4ZJ9G024"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+
+  gtag("config", "G-4D4ZJ9G024");
+</script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="mdui-drawer-body-left">
+    <div id="nexmoe-background">
+        <div class="nexmoe-bg" 
+            style="background-image: url(/images/BackGround.jpg)"
+        ></div>
+        <div class="mdui-appbar mdui-shadow-0">
+            <div class="mdui-toolbar">
+                <a mdui-drawer="{target: '#drawer', swipe: true}" title="menu" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon nexmoefont icon-menu"></i></a>
+                <div class="mdui-toolbar-spacer"></div>
+                <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+                <a href="/" title="tastynoob" class="mdui-btn mdui-btn-icon"><img src="/images/header.jpg" alt="tastynoob"></a>
+            </div>
+        </div>
+    </div>
+    <div id="nexmoe-header">
+        <div class="nexmoe-drawer mdui-drawer" id="drawer">
+    <div class="nexmoe-avatar mdui-ripple">
+        <a href="/" title="tastynoob">
+            <img src="/images/header.jpg" alt="tastynoob" alt="tastynoob">
+        </a>
+    </div>
+    <div class="nexmoe-count">
+        <div><span>Articles</span>58</div>
+        <div><span>Tags</span>18</div>
+        <div><span>Categories</span>7</div>
+    </div>
+    <div class="nexmoe-list mdui-list" mdui-collapse="{accordion: true}">
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/" title="回到首页">
+            <i class="mdui-list-item-icon nexmoefont icon-home"></i>
+            <div class="mdui-list-item-content">
+                回到首页
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+            <i class="mdui-list-item-icon nexmoefont icon-container"></i>
+            <div class="mdui-list-item-content">
+                文章归档
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/PY.html" title="我的朋友">
+            <i class="mdui-list-item-icon nexmoefont icon-unorderedlist"></i>
+            <div class="mdui-list-item-content">
+                我的朋友
+            </div>
+        </a>
+        
+        <a class="nexmoe-list-item mdui-list-item mdui-ripple false" href="/about.html" title="关于自己">
+            <i class="mdui-list-item-icon nexmoefont icon-info-circle"></i>
+            <div class="mdui-list-item-content">
+                关于自己
+            </div>
+        </a>
+        
+    </div>
+    <aside id="nexmoe-sidebar">
+        
+            
+            <div class="nexmoe-widget-wrap">
+    <div class="nexmoe-widget nexmoe-search">
+         
+            <form id="search_form" action_e="https://cn.bing.com/search?q=site:tastynoob.github.io" onsubmit="return search();">
+                <label><input id="search_value" name="q" type="search" placeholder="Search"></label>
+            </form>
+         
+    </div>
+</div>
+
+
+
+
+        
+            
+            <div class="nexmoe-widget-wrap">
+	<div class="nexmoe-widget nexmoe-social">
+		<a
+			class="mdui-ripple"
+			href="https://github.com/tastynoob/"
+			target="_blank"
+			mdui-tooltip="{content: 'GitHub'}"
+			style="
+				color: rgb(25, 23, 23);
+				background-color: rgba(25, 23, 23, .1);
+			"
+		>
+			<i
+				class="nexmoefont icon-github"
+			></i> </a
+		>
+	</div>
+</div>
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Categories</h3>
+    <div class="nexmoe-widget">
+
+      <ul class="category-list">
+
+        
+
+
+        
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/fpga/">fpga</a>
+          <span class="category-list-count">27</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/linux/">linux</a>
+          <span class="category-list-count">1</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/人工智能/">人工智能</a>
+          <span class="category-list-count">7</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/其它/">其它</a>
+          <span class="category-list-count">8</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/处理器设计/">处理器设计</a>
+          <span class="category-list-count">3</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/框架/">框架</a>
+          <span class="category-list-count">4</span>
+        </li>
+
+        
+
+        <li class="category-list-item">
+          <a class="category-list-link" href="/categories/算法/">算法</a>
+          <span class="category-list-count">15</span>
+        </li>
+
+        
+      </ul>
+
+    </div>
+  </div>
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <div id="randomtagcloud" class="nexmoe-widget tagcloud nexmoe-rainbow">
+      <a href="/tags/LVGL/" style="font-size: 10px;">LVGL</a> <a href="/tags/arm/" style="font-size: 10px;">arm</a> <a href="/tags/chisel/" style="font-size: 13.33px;">chisel</a> <a href="/tags/k210/" style="font-size: 10px;">k210</a> <a href="/tags/lex-yacc/" style="font-size: 10px;">lex&yacc</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/nodejs/" style="font-size: 10px;">nodejs</a> <a href="/tags/riscv/" style="font-size: 18.33px;">riscv</a> <a href="/tags/test/" style="font-size: 10px;">test</a> <a href="/tags/verilog/" style="font-size: 20px;">verilog</a> <a href="/tags/vscode/" style="font-size: 11.67px;">vscode</a> <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" style="font-size: 15px;">信号处理</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 10px;">图形学</a> <a href="/tags/%E5%A3%B0%E5%AD%A6/" style="font-size: 10px;">声学</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 15px;">技术</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 16.67px;">神经网络</a> <a href="/tags/%E7%B3%BB%E7%BB%9F/" style="font-size: 13.33px;">系统</a> <a href="/tags/%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/" style="font-size: 10px;">语法分析</a>
+    </div>
+    
+      <script>
+        var maxTagcloud = parseInt(17);
+        var tags_length = parseInt(18);
+        var tags_arr = [];
+        for(var i = 0; i < tags_length; i++){
+          tags_arr.push(i);
+        }
+        tags_arr.sort(function (l, r) {
+          return Math.random() > 0.5 ? -1 : 1;
+        });
+        tags_arr = tags_arr.slice(0, maxTagcloud < tags_length ? tags_length - maxTagcloud : 0);
+        for(var tag_i = 0; tag_i < tags_arr.length; tag_i++){
+          document.getElementById("randomtagcloud").children[tags_arr[tag_i]].style.display = 'none';
+        }
+      </script>
+    
+  </div>
+
+        
+            
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Archive</h3>
+    <div class="nexmoe-widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/1970/">1970</a><span class="archive-list-count">53</span></li></ul>
+    </div>
+  </div>
+
+
+
+        
+            
+            
+  <div class="nexmoe-widget-wrap">
+    <h3 class="nexmoe-widget-title">Recent Posts</h3>
+    <div class="nexmoe-widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/04/29/%E5%B7%A5%E4%BD%9C/%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E6%96%B9%E6%B3%95/">高性能处理器设计与快速迭代方法</a>
+          </li>
+        
+          <li>
+            <a href="/2022/08/14/RISCV/toysoc/">启明星智能组暑期培训-toysoc-riscv处理器实现</a>
+          </li>
+        
+          <li>
+            <a href="/2022/03/08/RISCV/ritter-soc/">使用FPGA设计的入门级基于riscv指令集的soc</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/27/%E7%AE%97%E6%B3%95/%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/">简单讲解反向传播算法</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/22/%E7%AE%97%E6%B3%95/%E7%94%A8%E7%BA%AFc%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84BP%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">用纯c语言写一个完整的BP神经网络</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+        
+    </aside>
+    <div class="nexmoe-copyright">
+        &copy; 2023 tastynoob
+        Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+        & <a href="https://github.com/theme-nexmoe/hexo-theme-nexmoe" target="_blank">Nexmoe</a>
+        <br><a target="_blank" href="https://beian.miit.gov.cn/">鄂ICP备2020018486号</a>
+
+    </div>
+</div><!-- .nexmoe-drawer -->
+    </div>
+    <div id="nexmoe-content">
+        <div class="nexmoe-primary">
+    <div class="nexmoe-post">
+  <article>
+    
+        <div class="nexmoe-post-cover absolute" style="padding-top: NaN%;"> 
+            <img src="/images/cover/cover0.jpg" alt="高性能处理器设计与快速迭代方法" loading="lazy">
+            <h1>高性能处理器设计与快速迭代方法</h1>
+        </div>
+    
+    
+    <div class="nexmoe-post-meta">
+    <div class="nexmoe-rainbow">
+        <a class="nexmoefont icon-calendar-fill">2023年04月29日</a>
+        
+            <a class="nexmoefont icon-appstore-fill -link" href="/categories/%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1/">处理器设计</a>
+        
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+
+    <p>主要讲一下现代高性能处理器设计与性能迭代方法<br>简单综合一下几个月的实习学习结果</p>
+<span id="more"></span>
+
+
+<h2 id="现代高性能处理器设计思路"><a href="#现代高性能处理器设计思路" class="headerlink" title="现代高性能处理器设计思路"></a>现代高性能处理器设计思路</h2><h3 id="超标量乱序执行"><a href="#超标量乱序执行" class="headerlink" title="超标量乱序执行"></a>超标量乱序执行</h3><p>高性能的基石,提高ILP</p>
+<p>现代处理器后端一般结构比较固定</p>
+<p>使用重命名算法消除指令假依赖,使用保留站乱序发射指令</p>
+<p>deocde-&gt;rename-&gt;dispatch-&gt;issue-&gt;execute-&gt;writeback-&gt;commit(retire)</p>
+<p>处理器后端基本技术</p>
+<ul>
+<li>寄存器重命名</li>
+<li>推测快速唤醒及replay机制</li>
+</ul>
+<p>现代处理器还会额外使用基于寄存器重命名的mov消除技术,进一步提高ILP</p>
+<h4 id="推测唤醒预测器"><a href="#推测唤醒预测器" class="headerlink" title="推测唤醒预测器"></a>推测唤醒预测器</h4><p>一条指令从被唤醒到写回一般需要以下几个周期</p>
+<p>wakeup-&gt;select-&gt;issue-&gt;readData-&gt;execute-&gt;writeback</p>
+<p>如果我们需要指令背靠背执行</p>
+<p>则需要在第一条指令写回时,就已经在执行第二条指令了</p>
+<p>所以我们需要对第二条指令进行推测唤醒</p>
+<p>对于单周期执行的指令来说</p>
+<p>只需要在第一条指令select时,就对其他指令进行唤醒即可</p>
+<p>但是对于某些多周期指令(访存指令)来说,这个唤醒的时机并不确定</p>
+<p>当然,我们可以简单的认为访存指令一定会命中L1Cache,再进行唤醒</p>
+<p>考虑到实际情况,L1Cache的命中率较高,因此可以采取此方法</p>
+<p>当然,也可以提前预测访存指令能否命中L1Cache,再决定唤醒其它指令的时机</p>
+<h3 id="强大的分支预测"><a href="#强大的分支预测" class="headerlink" title="强大的分支预测"></a>强大的分支预测</h3><p>现代超标量乱序处理器流水长度基本在10-15之间,分支惩罚严重</p>
+<p>因此需要分支预测器减少惩罚</p>
+<p>现代高性能处理器往往有着非常复杂的分支预测器</p>
+<p>目前主流的是混合式预测器,即多个预测器共同作用</p>
+<p>香山处理器前端使用到了多个预测器</p>
+<p>按照速度可以分类为:</p>
+<ul>
+<li>能一个周期内得到结果的快速预测器,但是准确率差</li>
+<li>准确率更高,但是需要多个周期才能得到结果的复杂预测器</li>
+</ul>
+<p>这里主要挑复杂预测器来讲一下</p>
+<h4 id="TAGE预测器及其变体"><a href="#TAGE预测器及其变体" class="headerlink" title="TAGE预测器及其变体"></a>TAGE预测器及其变体</h4><p>TAGE预测器的核心思想是不同的程序段可能会有不同长度的分支历史相关性</p>
+<p>使用一个准确性计数器来决定某一个分支使用较长的全局分支历史进行预测还是使用较短的分支历史</p>
+<p>比如有的程序段比较看重全局分支历史,有的程序段则比较看重局部分支历史</p>
+<p>本质上是不同的分支历史长度对某一条分支指令的预测准确率</p>
+<p>TAGE可以通过训练来权衡一条分支指令使用哪种分支历史长度的预测结果</p>
+<p>TAGE还有不同变体,但本质上原理相似</p>
+<p>相关论文<br><a target="_blank" rel="noopener" href="https://inria.hal.science/hal-03408381/document">A case for (partially) tagged geometric history length branch prediction</a></p>
+<p><a target="_blank" rel="noopener" href="https://jilp.org/jwac-2/program/cbp3_07_seznec.pdf">A 64-Kbytes ITTAGE indirect branch predictor∗</a></p>
+<h4 id="解偶的取指前端"><a href="#解偶的取指前端" class="headerlink" title="解偶的取指前端"></a>解偶的取指前端</h4><p>解偶的取指前端通常将取值与分支预测分离</p>
+<p>因为分支预测速度实际上比取指快,如果等到取指取出指令再预测,可能会导致很多bubble</p>
+<p>解偶的分支预测器可以提前取指进行预测,预测更未来的指令流</p>
+<p>以供应足够的指令</p>
+<p>(论文名我忘了,关键词:decoupled frontend,stream fetch engine)</p>
+<h3 id="乱序访存"><a href="#乱序访存" class="headerlink" title="乱序访存"></a>乱序访存</h3><p>访存指令是限制现代处理器IPC的最大瓶颈</p>
+<p>根本原因是存储器速度与高性能处理器速度的不均衡</p>
+<p>因此现代处理器提高性能的方法之一就是提高MLP(memory level parallel)</p>
+<p>由于访存不能像寄存器重命名那样消除指令假依赖</p>
+<p>因此对于乱序访存,我们需要保证访存指令的依赖正确</p>
+<p>一般情况下我们需要做访存依赖预测</p>
+<p>如果一条访存指令被预测为无依赖,则直接执行</p>
+<p>如果被预测为有依赖,则需要等待所依赖的访存指令执行完成才能执行当前的访存指令</p>
+<h4 id="storeset访存依赖预测器"><a href="#storeset访存依赖预测器" class="headerlink" title="storeset访存依赖预测器"></a>storeset访存依赖预测器</h4><p>相关论文<br><a target="_blank" rel="noopener" href="https://people.csail.mit.edu/emer/papers/1998.06.isca.storesets.pdf">Memory Dependence Prediction using Store Sets</a></p>
+<hr>
+<h2 id="快速性能迭代"><a href="#快速性能迭代" class="headerlink" title="快速性能迭代"></a>快速性能迭代</h2><h3 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h3><p>当我们想知道某一项技术在我们的处理器上是否能带来性能提升时该怎么做?</p>
+<p>很简单</p>
+<p>将这项技术添加到处理器rtl中</p>
+<p>使用rtl仿真器运行benchmark得到性能结果</p>
+<p>将其与原始性能数据进行对比,我们就能知道这项技术是否有用</p>
+<p>但最大的问题是</p>
+<p>rtl代码修改麻烦,debug缓慢,往往需要几个月的时间</p>
+<p>同时rtl仿真器运行极其缓慢(运行完整的spec06可能需要几年时间)</p>
+<p>假如该技术没有任何作用,则意味着我们浪费了大量时间做无用功</p>
+<p>假如我们能找到一种方法,能够快速(一个星期)得到修改后的性能结果进行比对</p>
+<p>我们就能节省大量的无用功</p>
+<p>因此除了rtl仿真器之外,我们需要一种速度更快的模拟器</p>
+<h3 id="gem5模拟器"><a href="#gem5模拟器" class="headerlink" title="gem5模拟器"></a>gem5模拟器</h3><p>当我们使用hdl写好处理器后</p>
+<p>需要进行仿真或者综合后在fpga上运行得到结果</p>
+<p>以便测量处理器水平,方便进一步改进</p>
+<p>但是目前rtl仿真器仿真速度慢,fpga综合慢,价格高</p>
+<p>因此往往会使用速度更快的性能或时序模拟器来进行模拟运行</p>
+<p>下面是几种处理器模型</p>
+<table>
+<thead>
+<tr>
+<th>模拟&#x2F;仿真器种类</th>
+<th>模拟精度</th>
+<th>模拟速度</th>
+<th>用途</th>
+<th>举例</th>
+<th>使用便捷性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>isa功能模拟器</td>
+<td>无</td>
+<td>极快</td>
+<td>处理器行为验证</td>
+<td>nemu&#x2F;qemu</td>
+<td>高(只用于行为验证)</td>
+</tr>
+<tr>
+<td>通用性能模拟器</td>
+<td>较高</td>
+<td>快</td>
+<td>处理器性能验证</td>
+<td>gem5</td>
+<td>中(需要进行性能对齐)</td>
+</tr>
+<tr>
+<td>时序模拟器</td>
+<td>高</td>
+<td>慢</td>
+<td>处理器性能验证</td>
+<td>(一般是根据处理器模型进行搭建)</td>
+<td>(需要自行搭建)</td>
+</tr>
+<tr>
+<td>rtl仿真器</td>
+<td>极高</td>
+<td>极慢</td>
+<td>处理器rtl验证</td>
+<td>iverilog&#x2F;verlator</td>
+<td>高(自动生成rtl仿真模型)</td>
+</tr>
+</tbody></table>
+<p>实际上,性能测试往往可以与处理器架构分离</p>
+<p>即模拟器使用a种架构,而处理器则采用b中架构</p>
+<p>因此不可避免的会存在一定的性能测量误差(一般在10%左右)</p>
+<p>但是仍能够反映处理器当前的性能</p>
+<p>这点我们则可以使用<a target="_blank" rel="noopener" href="https://www.gem5.org/">gem5通用性能模拟器</a></p>
+<p>在使用之前我们需要将gem5与待测试的处理器rtl进行性能对齐,以便得到更高精度的性能对比结果</p>
+<p>但即使是gem5,运行完整的spec06仍然需要花上不少时间(一周左右)</p>
+<p>有没有更快的方法,能够让性能测算时间缩短到一天之内?</p>
+<h3 id="checkpoint采样"><a href="#checkpoint采样" class="headerlink" title="checkpoint采样"></a>checkpoint采样</h3><p>实际上一个程序往往有不同的特征点</p>
+<p>比如,在某一段时间内,分支指令比较多,在另一段时间内,访存指令比较多</p>
+<p>当然实际可能不会按这样划分</p>
+<p>但是把一个程序分成不同的子程序段的核心思想在于:</p>
+<p>处理器运行一个程序的完整性能反映了处理器对该程序的特征的处理速度</p>
+<p>比如(只是举例,实际checkpoint采样会使用特殊算法):</p>
+<p>我们将一段程序均匀的分为100份,然后从中均匀挑选20份程序段(checkpoint采样)</p>
+<p>我们再运行这20份checkpoints,得到20份局部性能数据后,进行加权和,就能够得到与完整程序的性能结果相似的性能数据</p>
+<p>并且精度可达90%以上,由于实际上并没有运行完整的程序,因此性能测算时间可进一步减少</p>
+<h3 id="warmup-预热"><a href="#warmup-预热" class="headerlink" title="warmup 预热"></a>warmup 预热</h3><p>当我们得到checkpoint后,准备运行时</p>
+<p>还需要做的一份十分重要的工作是预热,预热是什么下面会讲,我们先来看看为什么需要预热</p>
+<p>运行完整程序与运行checkpoint的最大区别在于:</p>
+<p>运行完整程序时,处理器中的分支预测器状态,cache等组件是一直都在更新的</p>
+<p>在到达采样点时,分支预测器和cache等组件内部是处于更新好的状态</p>
+<p>而直接运行checkpoint时,处理器中的状态一开始是空的,分支预测器和cache等组件都是处于初始状态</p>
+<p>因此在运行checkpoint时,我们需要提前运行一小段程序来将处理器组件的状态变为与运行完整程序到达该采样点时的状态</p>
+<p>这样我们才能得到更准确的性能数据</p>
+<p>一般流程则是:</p>
+<p>warmup-&gt;开启性能计数器-&gt;运行checkpoint</p>
+<p>实际上warmup所用的程序可以直接使用checkpoint,但不开启性能计数器</p>
+<h4 id="warmup-功能预热"><a href="#warmup-功能预热" class="headerlink" title="warmup 功能预热"></a>warmup 功能预热</h4><p>这是warmup的拓展,实际处理器在warmup的时候,可以只预热比较重要的组件</p>
+<p>比如:分支预测器,访存依赖预测器,L1,L2Cache等</p>
+<p>而这些组建实际上都位于处理器前端和访存模块,与后端执行组件无关</p>
+<p>因此在warmup时,我们可以将处理器后端执行组件切换为简单模型,比如功能模型</p>
+<p>以此来提高预热速度</p>
+<p>在正式运行checkpoint时再将后端功能模型切换为完整模型,以此来提高精度</p>
+<h3 id="快速性能迭代总结"><a href="#快速性能迭代总结" class="headerlink" title="快速性能迭代总结"></a>快速性能迭代总结</h3><p>使用gem5性能模拟器</p>
+<p>使用checkpoint加快程序运行速度</p>
+<p>使用warmup功能预热加快预热速度,同时几乎不影响性能测算精度</p>
+
+    
+  </article>
+
+  
+      
+    <div class="nexmoe-post-copyright">
+        <strong>Author：</strong>tastynoob<br>
+        <strong>Link：</strong><a href="https://tastynoob.github.io/2023/04/29/%E5%B7%A5%E4%BD%9C/%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E6%96%B9%E6%B3%95/" title="https:&#x2F;&#x2F;tastynoob.github.io&#x2F;2023&#x2F;04&#x2F;29&#x2F;%E5%B7%A5%E4%BD%9C&#x2F;%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E6%96%B9%E6%B3%95&#x2F;" target="_blank" rel="noopener">https:&#x2F;&#x2F;tastynoob.github.io&#x2F;2023&#x2F;04&#x2F;29&#x2F;%E5%B7%A5%E4%BD%9C&#x2F;%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E6%96%B9%E6%B3%95&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+
+        
+    </div>
+
+
+  
+  
+  <div class="nexmoe-post-meta nexmoe-rainbow">
+   
+    
+</div>
+  
+  
+    <script async src="/js/copy-codeblock.js?v=1682756347330"></script>
+  
+
+  
+      <div class="nexmoe-post-footer">
+          请在你的配置文件中设置 slotComment
+
+      </div>
+  
+</div>
+</div>
+        <div class="nexmoe-post-right">
+              <div class="nexmoe-fixed">
+                  <div class="nexmoe-tool"> 
+                    
+                      
+                        
+                          
+                          
+                              <button class="mdui-fab catalog" style="overflow:unset;">
+                                  <i class="nexmoefont icon-i-catalog"></i>
+                                  <div class="nexmoe-toc">
+                                      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%B0%E4%BB%A3%E9%AB%98%E6%80%A7%E8%83%BD%E5%A4%84%E7%90%86%E5%99%A8%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">现代高性能处理器设计思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%A0%87%E9%87%8F%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8C"><span class="toc-number">1.1.</span> <span class="toc-text">超标量乱序执行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A8%E6%B5%8B%E5%94%A4%E9%86%92%E9%A2%84%E6%B5%8B%E5%99%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">推测唤醒预测器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%A4%A7%E7%9A%84%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B"><span class="toc-number">1.2.</span> <span class="toc-text">强大的分支预测</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TAGE%E9%A2%84%E6%B5%8B%E5%99%A8%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93"><span class="toc-number">1.2.1.</span> <span class="toc-text">TAGE预测器及其变体</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%81%B6%E7%9A%84%E5%8F%96%E6%8C%87%E5%89%8D%E7%AB%AF"><span class="toc-number">1.2.2.</span> <span class="toc-text">解偶的取指前端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98"><span class="toc-number">1.3.</span> <span class="toc-text">乱序访存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#storeset%E8%AE%BF%E5%AD%98%E4%BE%9D%E8%B5%96%E9%A2%84%E6%B5%8B%E5%99%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">storeset访存依赖预测器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E6%80%A7%E8%83%BD%E8%BF%AD%E4%BB%A3"><span class="toc-number">2.</span> <span class="toc-text">快速性能迭代</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">核心原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gem5%E6%A8%A1%E6%8B%9F%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">gem5模拟器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#checkpoint%E9%87%87%E6%A0%B7"><span class="toc-number">2.3.</span> <span class="toc-text">checkpoint采样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#warmup-%E9%A2%84%E7%83%AD"><span class="toc-number">2.4.</span> <span class="toc-text">warmup 预热</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#warmup-%E5%8A%9F%E8%83%BD%E9%A2%84%E7%83%AD"><span class="toc-number">2.4.1.</span> <span class="toc-text">warmup 功能预热</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E6%80%A7%E8%83%BD%E8%BF%AD%E4%BB%A3%E6%80%BB%E7%BB%93"><span class="toc-number">2.5.</span> <span class="toc-text">快速性能迭代总结</span></a></li></ol></li></ol>
+                                  </div>
+                              </button>
+                          
+                          
+                      
+                    
+                      <a href="#nexmoe-content" class="toc-link" aria-label="Back To Top" title="top"><button class="mdui-fab mdui-ripple"><i class="nexmoefont icon-caret-top"></i></button></a>
+                  </div>
+              </div>
+            </div>
+    </div>
+    <div id="nexmoe-search-space">
+	<div class="search-container">
+		<div class="search-header">
+			<div class="search-input-container">
+				<input
+					class="search-input"
+					type="text"
+					placeholder="Search"
+					oninput="sinput();"
+				/>
+			</div>
+			<a class="search-close" onclick="sclose();">×</a>
+		</div>
+		<div class="search-body"></div>
+	</div>
+</div>
+
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2058306854838448" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
